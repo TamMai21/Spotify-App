@@ -1,20 +1,23 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import SignInScreen from "./screens/SignInScreen";
+import { NavigationContainer } from "@react-navigation/native";
 
 export default function App() {
     return (
-        <View style={styles.container}>
-            <SignInScreen></SignInScreen>
-            <StatusBar style="auto" />
-        </View>
+        <NavigationContainer>
+            <View style={styles.container}>
+                <Text>Open up App.js to start working on your app!</Text>
+                <StatusBar style="auto" />
+            </View>
+        </NavigationContainer>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         backgroundColor: "#fff",
-        width: "100%",
-        padding: "40px",
+        alignItems: "center",
+        justifyContent: "center",
     },
 });
