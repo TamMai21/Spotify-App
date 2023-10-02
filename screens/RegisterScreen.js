@@ -3,29 +3,37 @@ import React from "react";
 import InputGroup from "../components/input-group";
 import Button from "../components/button";
 
-export default function SignInScreen({ navigation }) {
-    const handleSignIn = () => {
+export default function RegisterScreen() {
+    const handleRegister = () => {
         navigation.navigate("Home");
     };
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Sign In to Spotify</Text>
+            <Text style={styles.title}>Register Account</Text>
             <InputGroup
                 label="Email:"
                 placeholder="Enter your email address"
             ></InputGroup>
             <InputGroup
+                label="Full Name:"
+                placeholder="Enter your full name"
+            ></InputGroup>
+            <InputGroup
                 label="Password"
                 placeholder="Enter your password"
             ></InputGroup>
-            <Button onPress={handleSignIn} title="Login"></Button>
+            <InputGroup
+                label="Confirm Password"
+                placeholder="Enter your password"
+            ></InputGroup>
+            <Button title="Register" onPress={handleRegister}></Button>
             <Text style={{ fontSize: 20, fontWeight: "bold", color: "white" }}>
-                Not register yet?{" "}
+                Already have account?{" "}
                 <Text
                     style={{ textDecorationLine: "underline", color: "blue" }}
-                    onPress={() => navigation.navigate("Register")}
+                    onPress={() => navigation.navigate("Login")}
                 >
-                    Register
+                    Login
                 </Text>
             </Text>
         </View>
@@ -42,8 +50,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: "32px",
-        textAlign: "center",
-        marginBottom: "40px",
+        marginBottom: "20px",
         fontWeight: "bold",
         color: "white",
     },
