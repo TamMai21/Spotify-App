@@ -5,11 +5,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RegisterScreen from "./screens/RegisterScreen";
 import Toast from "react-native-toast-message";
 import toastConfig from "./utils/toastConfig";
+import { AuthProvider } from "./context/auth-context";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
     return (
-        <>
+        <AuthProvider>
             <NavigationContainer>
                 <Stack.Navigator initialRouteName="App">
                     <Stack.Screen
@@ -30,6 +31,6 @@ export default function App() {
                 </Stack.Navigator>
             </NavigationContainer>
             <Toast config={toastConfig} />
-        </>
+        </AuthProvider>
     );
 }

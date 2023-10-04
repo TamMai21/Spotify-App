@@ -6,6 +6,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import Toast from "react-native-toast-message";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, db } from "../utils/firebaseConfig";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 const schemaValidation = yup.object({
     fullname: yup.string().required("Please enter your full name"),
@@ -25,7 +28,7 @@ const schemaValidation = yup.object({
         .email("Please enter valid email address")
         .required("Please enter your email address"),
 });
-export default function RegisterScreen() {
+export default function RegisterScreen({ navigation }) {
     const {
         handleSubmit,
         formState: { errors, isSubmitting, isValid },
@@ -34,36 +37,44 @@ export default function RegisterScreen() {
     } = useForm({
         resolver: yupResolver(schemaValidation),
         defaultValues: {
+            fullname: "AzureVDT",
+            email: "azuredev@gmail.com",
+            password: "AzureVDT@123",
+        },
+    });
+    const handleRegister = async (values) => {
+        if (!isValid) return;
+        await createUserWithEmailAndPassword(
+            auth,
+            values.email,
+            values.password
+        );
+        await setDoc(doc(db, "users", auth.currentUser.uid), {
+            fullname: values.fullname,
+            email: values.email,
+            password: values.password,
+            avatar: "https://source.unsplash.com/random",
+            createdAt: serverTimestamp(),
+        });
+        await updateProfile(auth.currentUser, {
+            displayName: values.fullname,
+            photoURL: "https://source.unsplash.com/random",
+        });
+        reset({
             fullname: "",
             email: "",
             password: "",
-        },
-    });
-    console.log(errors);
-    const handleRegister = (values) => {
-        if (!isValid) return;
-        console.log(values);
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve();
-                console.log(values);
-                reset({
-                    fullname: "",
-                    email: "",
-                    password: "",
-                });
-                Toast.show({
-                    type: "success",
-                    text1: "Register successfully",
-                    text2: "Welcome to Spotify",
-                    visibilityTime: 2000,
-                    autoHide: true,
-                    topOffset: 30,
-                    bottomOffset: 40,
-                });
-                // navigation.navigate("Home");
-            }, 5000);
         });
+        Toast.show({
+            type: "success",
+            text1: "Register successfully",
+            text2: "Welcome to Spotify",
+            visibilityTime: 2000,
+            autoHide: true,
+            topOffset: 30,
+            bottomOffset: 40,
+        });
+        navigation.navigate("Home");
     };
     return (
         <View style={styles.container}>
@@ -97,6 +108,7 @@ export default function RegisterScreen() {
                 placeholder="Enter your password"
                 control={control}
                 name="password"
+                isPassword={true}
             >
                 {errors?.password && (
                     <Text style={styles.errorMessage}>

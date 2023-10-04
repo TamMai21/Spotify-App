@@ -1,11 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import InputGroup from "../components/input-group";
 import Button from "../components/button";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Toast from "react-native-toast-message";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../utils/firebaseConfig";
+import { useAuth } from "../context/auth-context";
 
 const schemaValidation = yup.object({
     password: yup
@@ -34,35 +37,24 @@ export default function SignInScreen({ navigation }) {
     } = useForm({
         resolver: yupResolver(schemaValidation),
         defaultValues: {
-            email: "azuredev03@gmail.com",
-            password: "Azuredev@123",
+            email: "azuredev@gmail.com",
+            password: "AzureVDT@123",
         },
     });
-    console.log(isSubmitting);
-    const handleSignIn = (values) => {
+    const { userInfo } = useAuth();
+    const handleSignIn = async (values) => {
         if (!isValid) return;
-        console.log(values);
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve();
-                console.log(values);
-                // reset({
-                //     email: "",
-                //     password: "",
-                // });
-                Toast.show({
-                    type: "success",
-                    text1: "Sign in successfully",
-                    text2: "Welcome to Spotify",
-                    visibilityTime: 2000,
-                    autoHide: true,
-                    topOffset: 30,
-                    bottomOffset: 40,
-                });
-
-                // navigation.navigate("Home");
-            }, 2000);
+        await signInWithEmailAndPassword(auth, values.email, values.password);
+        Toast.show({
+            type: "success",
+            text1: "Sign in successfully",
+            text2: "Welcome to Spotify",
+            visibilityTime: 2000,
+            autoHide: true,
+            topOffset: 30,
+            bottomOffset: 40,
         });
+        navigation.navigate("Home");
     };
     return (
         <View style={styles.container}>
@@ -84,6 +76,7 @@ export default function SignInScreen({ navigation }) {
                 placeholder="Enter your password"
                 control={control}
                 name="password"
+                isPassword={true}
             >
                 {errors?.password && (
                     <Text style={styles.errorMessage}>
