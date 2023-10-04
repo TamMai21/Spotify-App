@@ -5,6 +5,7 @@ import Button from "../components/button";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import Toast from "react-native-toast-message";
 
 const schemaValidation = yup.object({
     password: yup
@@ -33,24 +34,35 @@ export default function SignInScreen({ navigation }) {
     } = useForm({
         resolver: yupResolver(schemaValidation),
         defaultValues: {
-            email: "",
-            password: "",
+            email: "azuredev03@gmail.com",
+            password: "Azuredev@123",
         },
     });
-    const handleSignIn = () => {
+    console.log(isSubmitting);
+    const handleSignIn = (values) => {
         if (!isValid) return;
         console.log(values);
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve();
                 console.log(values);
-                reset({
-                    email: "",
-                    password: "",
+                // reset({
+                //     email: "",
+                //     password: "",
+                // });
+                Toast.show({
+                    type: "success",
+                    text1: "Sign in successfully",
+                    text2: "Welcome to Spotify",
+                    visibilityTime: 2000,
+                    autoHide: true,
+                    topOffset: 30,
+                    bottomOffset: 40,
                 });
-            }, 5000);
+
+                // navigation.navigate("Home");
+            }, 2000);
         });
-        // navigation.navigate("Home");
     };
     return (
         <View style={styles.container}>

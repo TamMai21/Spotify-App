@@ -5,6 +5,7 @@ import Button from "../components/button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
+import Toast from "react-native-toast-message";
 
 const schemaValidation = yup.object({
     fullname: yup.string().required("Please enter your full name"),
@@ -51,10 +52,18 @@ export default function RegisterScreen() {
                     email: "",
                     password: "",
                 });
+                Toast.show({
+                    type: "success",
+                    text1: "Register successfully",
+                    text2: "Welcome to Spotify",
+                    visibilityTime: 2000,
+                    autoHide: true,
+                    topOffset: 30,
+                    bottomOffset: 40,
+                });
+                // navigation.navigate("Home");
             }, 5000);
         });
-
-        // navigation.navigate("Home");
     };
     return (
         <View style={styles.container}>
