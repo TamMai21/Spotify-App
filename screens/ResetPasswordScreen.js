@@ -15,7 +15,7 @@ const schemaValidation = yup.object({
         .email("Please enter valid email address")
         .required("Please enter your email address"),
 });
-export default function ResetPasswordScreen() {
+export default function ResetPasswordScreen({ navigation }) {
     const {
         handleSubmit,
         formState: { errors, isSubmitting, isValid },
@@ -39,6 +39,7 @@ export default function ResetPasswordScreen() {
             topOffset: 30,
             bottomOffset: 40,
         });
+        navigation.navigate("Login");
     };
     return (
         <LayoutAuthentication authTitle="Reset your password">
@@ -64,4 +65,10 @@ export default function ResetPasswordScreen() {
     );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    errorMessage: {
+        color: "red",
+        fontSize: "14px",
+        fontWeight: "bold",
+    },
+});

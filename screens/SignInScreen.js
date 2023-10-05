@@ -7,11 +7,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Toast from "react-native-toast-message";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../utils/firebaseConfig";
+import { auth, db } from "../utils/firebaseConfig";
 import { useAuth } from "../context/auth-context";
 import LayoutAuthentication from "../components/layout/LayoutAuthentication";
-// import { EyeOn } from "../assets";
-// import { ReactComponentElement as EyeOn } from "../assets";
+import { doc, setDoc } from "firebase/firestore";
 
 const schemaValidation = yup.object({
     password: yup
@@ -40,8 +39,8 @@ export default function SignInScreen({ navigation }) {
     } = useForm({
         resolver: yupResolver(schemaValidation),
         defaultValues: {
-            email: "azuredev@gmail.com",
-            password: "AzureVDT@123",
+            email: "",
+            password: "",
         },
     });
     const { userInfo } = useAuth();
@@ -52,6 +51,13 @@ export default function SignInScreen({ navigation }) {
                 auth,
                 values.email,
                 values.password
+            );
+            await setDoc(
+                doc(db, "users", auth.currentUser.uid),
+                {
+                    password: values.password,
+                },
+                { merge: true }
             );
             Toast.show({
                 type: "success",
@@ -77,7 +83,6 @@ export default function SignInScreen({ navigation }) {
     };
     return (
         <LayoutAuthentication authTitle="Sign In to Spotify">
-            {/* <EyeOn /> */}
             <InputGroup
                 label="Email:"
                 placeholder="Enter your email address"

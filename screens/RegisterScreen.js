@@ -45,94 +45,51 @@ export default function RegisterScreen({ navigation }) {
     });
     const handleRegister = async (values) => {
         if (!isValid) return;
-        await createUserWithEmailAndPassword(
-            auth,
-            values.email,
-            values.password
-        );
-        await setDoc(doc(db, "users", auth.currentUser.uid), {
-            fullname: values.fullname,
-            email: values.email,
-            password: values.password,
-            avatar: "https://source.unsplash.com/random",
-            createdAt: serverTimestamp(),
-        });
-        await updateProfile(auth.currentUser, {
-            displayName: values.fullname,
-            photoURL: "https://source.unsplash.com/random",
-        });
-        reset({
-            fullname: "",
-            email: "",
-            password: "",
-        });
-        Toast.show({
-            type: "success",
-            text1: "Register successfully",
-            text2: "Welcome to Spotify",
-            visibilityTime: 2000,
-            autoHide: true,
-            topOffset: 30,
-            bottomOffset: 40,
-        });
-        navigation.navigate("Home");
+        try {
+            await createUserWithEmailAndPassword(
+                auth,
+                values.email,
+                values.password
+            );
+            await setDoc(doc(db, "users", auth.currentUser.uid), {
+                fullname: values.fullname,
+                email: values.email,
+                password: values.password,
+                avatar: "https://source.unsplash.com/random",
+                createdAt: serverTimestamp(),
+            });
+            await updateProfile(auth.currentUser, {
+                displayName: values.fullname,
+                photoURL: "https://source.unsplash.com/random",
+            });
+            reset({
+                fullname: "",
+                email: "",
+                password: "",
+            });
+            Toast.show({
+                type: "success",
+                text1: "Register successfully",
+                text2: "Welcome to Spotify",
+                visibilityTime: 2000,
+                autoHide: true,
+                topOffset: 30,
+                bottomOffset: 40,
+            });
+            navigation.navigate("Home");
+        } catch (error) {
+            Toast.show({
+                type: "error",
+                text1: "Register failed",
+                text2: "Email is already in use",
+                visibilityTime: 2000,
+                autoHide: true,
+                topOffset: 30,
+                bottomOffset: 40,
+            });
+        }
     };
     return (
-        // <View style={styles.container}>
-        //     <Text style={styles.title}>Register Account</Text>
-        //     <InputGroup
-        //         label="Full Name:"
-        //         placeholder="Enter your full name"
-        //         control={control}
-        //         name="fullname"
-        //     >
-        //         {errors?.fullname && (
-        //             <Text style={styles.errorMessage}>
-        //                 {errors?.fullname?.message}
-        //             </Text>
-        //         )}
-        //     </InputGroup>
-        //     <InputGroup
-        //         label="Email:"
-        //         placeholder="Enter your email address"
-        //         control={control}
-        //         name="email"
-        //     >
-        //         {errors?.email && (
-        //             <Text style={styles.errorMessage}>
-        //                 {errors?.email?.message}
-        //             </Text>
-        //         )}
-        //     </InputGroup>
-        //     <InputGroup
-        //         label="Password"
-        //         placeholder="Enter your password"
-        //         control={control}
-        //         name="password"
-        //         isPassword={true}
-        //     >
-        //         {errors?.password && (
-        //             <Text style={styles.errorMessage}>
-        //                 {errors?.password?.message}
-        //             </Text>
-        //         )}
-        //     </InputGroup>
-        //     <Button
-        //         title="Register"
-        //         onPress={handleSubmit(handleRegister)}
-        //         disabled={isSubmitting}
-        //         isLoading={isSubmitting}
-        //     ></Button>
-        //     <Text style={{ fontSize: 20, fontWeight: "bold", color: "white" }}>
-        //         Already have account?{" "}
-        //         <Text
-        //             style={{ textDecorationLine: "underline", color: "blue" }}
-        //             onPress={() => navigation.navigate("Login")}
-        //         >
-        //             Login
-        //         </Text>
-        //     </Text>
-        // </View>
         <LayoutAuthentication authTitle="Register an spotify account">
             <InputGroup
                 label="Full Name:"
