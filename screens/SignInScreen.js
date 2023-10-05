@@ -9,6 +9,9 @@ import Toast from "react-native-toast-message";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../utils/firebaseConfig";
 import { useAuth } from "../context/auth-context";
+import LayoutAuthentication from "../components/layout/LayoutAuthentication";
+// import { EyeOn } from "../assets";
+// import { ReactComponentElement as EyeOn } from "../assets";
 
 const schemaValidation = yup.object({
     password: yup
@@ -44,21 +47,37 @@ export default function SignInScreen({ navigation }) {
     const { userInfo } = useAuth();
     const handleSignIn = async (values) => {
         if (!isValid) return;
-        await signInWithEmailAndPassword(auth, values.email, values.password);
-        Toast.show({
-            type: "success",
-            text1: "Sign in successfully",
-            text2: "Welcome to Spotify",
-            visibilityTime: 2000,
-            autoHide: true,
-            topOffset: 30,
-            bottomOffset: 40,
-        });
-        navigation.navigate("Home");
+        try {
+            await signInWithEmailAndPassword(
+                auth,
+                values.email,
+                values.password
+            );
+            Toast.show({
+                type: "success",
+                text1: "Sign in successfully",
+                text2: "Welcome to Spotify",
+                visibilityTime: 2000,
+                autoHide: true,
+                topOffset: 30,
+                bottomOffset: 40,
+            });
+            navigation.navigate("Home");
+        } catch (error) {
+            Toast.show({
+                type: "error",
+                text1: "Sign in failed",
+                text2: "Password or email is incorrect",
+                visibilityTime: 2000,
+                autoHide: true,
+                topOffset: 30,
+                bottomOffset: 40,
+            });
+        }
     };
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Sign In to Spotify</Text>
+        <LayoutAuthentication authTitle="Sign In to Spotify">
+            {/* <EyeOn /> */}
             <InputGroup
                 label="Email:"
                 placeholder="Enter your email address"
@@ -84,6 +103,17 @@ export default function SignInScreen({ navigation }) {
                     </Text>
                 )}
             </InputGroup>
+            <Text
+                style={{
+                    color: "white",
+                    fontStyle: "italic",
+                    fontSize: "16px",
+                    textAlign: "right",
+                }}
+                onPress={() => navigation.navigate("ResetPassword")}
+            >
+                Forgot password?
+            </Text>
             <Button
                 onPress={handleSubmit(handleSignIn)}
                 title="Login"
@@ -99,25 +129,11 @@ export default function SignInScreen({ navigation }) {
                     Register
                 </Text>
             </Text>
-        </View>
+        </LayoutAuthentication>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "flex-start",
-        gap: "30px",
-        padding: "40px",
-        backgroundColor: "rgb(15, 23, 42)",
-    },
-    title: {
-        fontSize: "32px",
-        textAlign: "center",
-        marginBottom: "40px",
-        fontWeight: "bold",
-        color: "white",
-    },
     errorMessage: {
         color: "red",
         fontSize: "14px",

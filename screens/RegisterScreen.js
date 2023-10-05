@@ -9,6 +9,7 @@ import Toast from "react-native-toast-message";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../utils/firebaseConfig";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import LayoutAuthentication from "../components/layout/LayoutAuthentication";
 
 const schemaValidation = yup.object({
     fullname: yup.string().required("Please enter your full name"),
@@ -77,8 +78,62 @@ export default function RegisterScreen({ navigation }) {
         navigation.navigate("Home");
     };
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Register Account</Text>
+        // <View style={styles.container}>
+        //     <Text style={styles.title}>Register Account</Text>
+        //     <InputGroup
+        //         label="Full Name:"
+        //         placeholder="Enter your full name"
+        //         control={control}
+        //         name="fullname"
+        //     >
+        //         {errors?.fullname && (
+        //             <Text style={styles.errorMessage}>
+        //                 {errors?.fullname?.message}
+        //             </Text>
+        //         )}
+        //     </InputGroup>
+        //     <InputGroup
+        //         label="Email:"
+        //         placeholder="Enter your email address"
+        //         control={control}
+        //         name="email"
+        //     >
+        //         {errors?.email && (
+        //             <Text style={styles.errorMessage}>
+        //                 {errors?.email?.message}
+        //             </Text>
+        //         )}
+        //     </InputGroup>
+        //     <InputGroup
+        //         label="Password"
+        //         placeholder="Enter your password"
+        //         control={control}
+        //         name="password"
+        //         isPassword={true}
+        //     >
+        //         {errors?.password && (
+        //             <Text style={styles.errorMessage}>
+        //                 {errors?.password?.message}
+        //             </Text>
+        //         )}
+        //     </InputGroup>
+        //     <Button
+        //         title="Register"
+        //         onPress={handleSubmit(handleRegister)}
+        //         disabled={isSubmitting}
+        //         isLoading={isSubmitting}
+        //     ></Button>
+        //     <Text style={{ fontSize: 20, fontWeight: "bold", color: "white" }}>
+        //         Already have account?{" "}
+        //         <Text
+        //             style={{ textDecorationLine: "underline", color: "blue" }}
+        //             onPress={() => navigation.navigate("Login")}
+        //         >
+        //             Login
+        //         </Text>
+        //     </Text>
+        // </View>
+        <LayoutAuthentication authTitle="Register an spotify account">
             <InputGroup
                 label="Full Name:"
                 placeholder="Enter your full name"
@@ -131,24 +186,11 @@ export default function RegisterScreen({ navigation }) {
                     Login
                 </Text>
             </Text>
-        </View>
+        </LayoutAuthentication>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "flex-start",
-        gap: "30px",
-        padding: "40px",
-        backgroundColor: "rgb(15, 23, 42)",
-    },
-    title: {
-        fontSize: "32px",
-        marginBottom: "20px",
-        fontWeight: "bold",
-        color: "white",
-    },
     errorMessage: {
         color: "red",
         fontSize: "14px",

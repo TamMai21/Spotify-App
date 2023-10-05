@@ -19,12 +19,16 @@ const toastConfig = {
     error: (props) => (
         <ErrorToast
             {...props}
-            style={{ borderLeftColor: "#dc3545", borderLeftWidth: 10 }}
+            style={{
+                borderLeftColor: "#dc3545",
+                borderLeftWidth: 10,
+                flexWrap: "wrap",
+            }}
             text1Style={{
-                fontSize: 17,
+                fontSize: 16,
             }}
             text2Style={{
-                fontSize: 15,
+                fontSize: 14,
             }}
         />
     ),

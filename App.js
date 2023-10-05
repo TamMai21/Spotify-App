@@ -6,6 +6,7 @@ import RegisterScreen from "./screens/RegisterScreen";
 import Toast from "react-native-toast-message";
 import toastConfig from "./utils/toastConfig";
 import { AuthProvider } from "./context/auth-context";
+import ResetPasswordScreen from "./screens/ResetPasswordScreen";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -17,6 +18,11 @@ export default function App() {
                         name="Login"
                         component={SignInScreen}
                         options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="ResetPassword"
+                        component={ResetPasswordScreen}
+                        options={{ headerShown: true }}
                     />
                     <Stack.Screen
                         name="Register"
