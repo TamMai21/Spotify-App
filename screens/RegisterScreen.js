@@ -77,6 +77,11 @@ export default function RegisterScreen({ navigation }) {
                 topOffset: 30,
                 bottomOffset: 40,
             });
+            reset({
+                fullname: "",
+                email: "",
+                password: "",
+            });
             navigation.navigate("Home");
         } catch (error) {
             Toast.show({
@@ -92,42 +97,45 @@ export default function RegisterScreen({ navigation }) {
     };
     return (
         <LayoutAuthentication authTitle="Register an spotify account">
-            <InputGroup
-                label="Full Name:"
-                placeholder="Enter your full name"
-                control={control}
-                name="fullname"
-            >
+            <View>
+                <InputGroup
+                    label="Full Name:"
+                    placeholder="Enter your full name"
+                    control={control}
+                    name="fullname"
+                ></InputGroup>
                 {errors?.fullname && (
                     <Text style={styles.errorMessage}>
                         {errors?.fullname?.message}
                     </Text>
                 )}
-            </InputGroup>
-            <InputGroup
-                label="Email:"
-                placeholder="Enter your email address"
-                control={control}
-                name="email"
-            >
+            </View>
+            <View>
+                <InputGroup
+                    label="Email:"
+                    placeholder="Enter your email address"
+                    control={control}
+                    name="email"
+                ></InputGroup>
                 {errors?.email && (
                     <Text style={styles.errorMessage}>
                         {errors?.email?.message}
                     </Text>
                 )}
-            </InputGroup>
-            <InputPasswordGroup
-                label="Password"
-                placeholder="Enter your password"
-                control={control}
-                name="password"
-            >
+            </View>
+            <View>
+                <InputPasswordGroup
+                    label="Password"
+                    placeholder="Enter your password"
+                    control={control}
+                    name="password"
+                ></InputPasswordGroup>
                 {errors?.password && (
                     <Text style={styles.errorMessage}>
                         {errors?.password?.message}
                     </Text>
                 )}
-            </InputPasswordGroup>
+            </View>
             <Button
                 title="Register"
                 onPress={handleSubmit(handleRegister)}
@@ -152,5 +160,6 @@ const styles = StyleSheet.create({
         color: "red",
         fontSize: "14px",
         fontWeight: "bold",
+        marginTop: 5,
     },
 });

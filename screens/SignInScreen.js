@@ -15,17 +15,7 @@ import IconEyeClose from "../components/icon/IconEyeClose";
 import InputPasswordGroup from "../components/input-group/InputPasswordGroup";
 
 const schemaValidation = yup.object({
-    password: yup
-        .string()
-        .min(8, "Your password must be at least 8 character or greater")
-        .matches(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-            {
-                message:
-                    "Your password must have at least with one lowercase, uppercase, digit and special character",
-            }
-        )
-        .required("Please enter your password"),
+    password: yup.string().required("Please enter your password"),
     email: yup
         .string()
         .email("Please enter valid email address")
@@ -61,6 +51,10 @@ export default function SignInScreen({ navigation }) {
                 },
                 { merge: true }
             );
+            reset({
+                email: "",
+                password: "",
+            });
             Toast.show({
                 type: "success",
                 text1: "Sign in successfully",
@@ -85,41 +79,50 @@ export default function SignInScreen({ navigation }) {
     };
     return (
         <LayoutAuthentication authTitle="Sign In to Spotify">
-            <InputGroup
-                label="Email:"
-                placeholder="Enter your email address"
-                control={control}
-                name="email"
-            >
+            <View>
+                <InputGroup
+                    label="Email:"
+                    placeholder="Enter your email address"
+                    control={control}
+                    name="email"
+                ></InputGroup>
                 {errors?.email && (
                     <Text style={styles.errorMessage}>
                         {errors?.email?.message}
                     </Text>
                 )}
-            </InputGroup>
-            <InputPasswordGroup
-                label="Password"
-                placeholder="Enter your password"
-                control={control}
-                name="password"
-            >
+            </View>
+            <View>
+                <InputPasswordGroup
+                    label="Password"
+                    placeholder="Enter your password"
+                    control={control}
+                    name="password"
+                ></InputPasswordGroup>
                 {errors?.password && (
                     <Text style={styles.errorMessage}>
                         {errors?.password?.message}
                     </Text>
                 )}
-            </InputPasswordGroup>
-            <Text
+            </View>
+            <View
                 style={{
-                    color: "white",
-                    fontStyle: "italic",
-                    fontSize: "16px",
-                    textAlign: "right",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
                 }}
-                onPress={() => navigation.navigate("ResetPassword")}
             >
-                Forgot password?
-            </Text>
+                <Text></Text>
+                <Text
+                    style={{
+                        color: "white",
+                        fontStyle: "italic",
+                        fontSize: "16px",
+                    }}
+                    onPress={() => navigation.navigate("ResetPassword")}
+                >
+                    Forgot password?
+                </Text>
+            </View>
             <Button
                 onPress={handleSubmit(handleSignIn)}
                 title="Login"
@@ -144,5 +147,6 @@ const styles = StyleSheet.create({
         color: "red",
         fontSize: "14px",
         fontWeight: "bold",
+        marginTop: 5,
     },
 });

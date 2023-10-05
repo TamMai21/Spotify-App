@@ -14,9 +14,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "flex-start",
-        gap: "30px",
-        padding: "40px",
+        gap: "20px",
+        padding: "20px",
         backgroundColor: "rgb(15, 23, 42)",
+        overflow: "hidden",
     },
     title: {
         fontSize: "32px",
