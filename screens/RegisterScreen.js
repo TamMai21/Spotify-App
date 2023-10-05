@@ -10,6 +10,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../utils/firebaseConfig";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import LayoutAuthentication from "../components/layout/LayoutAuthentication";
+import InputPasswordGroup from "../components/input-group/InputPasswordGroup";
 
 const schemaValidation = yup.object({
     fullname: yup.string().required("Please enter your full name"),
@@ -38,9 +39,9 @@ export default function RegisterScreen({ navigation }) {
     } = useForm({
         resolver: yupResolver(schemaValidation),
         defaultValues: {
-            fullname: "AzureVDT",
-            email: "azuredev@gmail.com",
-            password: "AzureVDT@123",
+            fullname: "",
+            email: "",
+            password: "",
         },
     });
     const handleRegister = async (values) => {
@@ -115,19 +116,18 @@ export default function RegisterScreen({ navigation }) {
                     </Text>
                 )}
             </InputGroup>
-            <InputGroup
+            <InputPasswordGroup
                 label="Password"
                 placeholder="Enter your password"
                 control={control}
                 name="password"
-                isPassword={true}
             >
                 {errors?.password && (
                     <Text style={styles.errorMessage}>
                         {errors?.password?.message}
                     </Text>
                 )}
-            </InputGroup>
+            </InputPasswordGroup>
             <Button
                 title="Register"
                 onPress={handleSubmit(handleRegister)}

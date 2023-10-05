@@ -11,6 +11,8 @@ import { auth, db } from "../utils/firebaseConfig";
 import { useAuth } from "../context/auth-context";
 import LayoutAuthentication from "../components/layout/LayoutAuthentication";
 import { doc, setDoc } from "firebase/firestore";
+import IconEyeClose from "../components/icon/IconEyeClose";
+import InputPasswordGroup from "../components/input-group/InputPasswordGroup";
 
 const schemaValidation = yup.object({
     password: yup
@@ -95,19 +97,18 @@ export default function SignInScreen({ navigation }) {
                     </Text>
                 )}
             </InputGroup>
-            <InputGroup
+            <InputPasswordGroup
                 label="Password"
                 placeholder="Enter your password"
                 control={control}
                 name="password"
-                isPassword={true}
             >
                 {errors?.password && (
                     <Text style={styles.errorMessage}>
                         {errors?.password?.message}
                     </Text>
                 )}
-            </InputGroup>
+            </InputPasswordGroup>
             <Text
                 style={{
                     color: "white",
