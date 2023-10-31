@@ -64,7 +64,7 @@ export default function SignInScreen({ navigation }) {
                 topOffset: 30,
                 bottomOffset: 40,
             });
-            navigation.navigate("Home");
+            navigation.navigate("Main");
         } catch (error) {
             Toast.show({
                 type: "error",

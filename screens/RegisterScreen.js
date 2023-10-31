@@ -82,7 +82,7 @@ export default function RegisterScreen({ navigation }) {
                 email: "",
                 password: "",
             });
-            navigation.navigate("Home");
+            navigation.navigate("Main");
         } catch (error) {
             Toast.show({
                 type: "error",
