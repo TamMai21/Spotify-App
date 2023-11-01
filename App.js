@@ -14,7 +14,7 @@ export default function App() {
         <AuthProvider>
             <NavigationContainer>
                 <Stack.Navigator initialRouteName="App">
-                    <Stack.Screen
+                    {/* <Stack.Screen
                         name="Login"
                         component={SignInScreen}
                         options={{ headerShown: false }}
@@ -23,12 +23,12 @@ export default function App() {
                         name="ResetPassword"
                         component={ResetPasswordScreen}
                         options={{ headerShown: true }}
-                    />
+                    />npm in
                     <Stack.Screen
                         name="Register"
                         component={RegisterScreen}
                         options={{ headerShown: false }}
-                    />
+                    /> */}
                     <Stack.Screen
                         name="Main"
                         component={MainScreen}
