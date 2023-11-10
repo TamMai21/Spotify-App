@@ -1,19 +1,19 @@
 import { StyleSheet } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import SearchScreen from "./SearchScreen";
 import HomeScreen from "./HomeScreen";
 import LibraryScreen from "./LibraryScreen";
 import IconHome from "../components/icon/IconHome";
 import IconSearch from "../components/icon/IconSearch";
 import IconLibrary from "../components/icon/IconLibrary";
+import SearchStack from "../stacks/SearchStack";
 
 const Tab = createBottomTabNavigator();
 
 export default function MainScreen() {
     return (
         <Tab.Navigator screenOptions={{ headerShown: false }}>
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Home"
                 component={HomeScreen}
                 options={{
@@ -25,10 +25,10 @@ export default function MainScreen() {
                         ></IconHome>
                     ),
                 }}
-            />
+            /> */}
             <Tab.Screen
                 name="Search"
-                component={SearchScreen}
+                component={SearchStack}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <IconSearch
