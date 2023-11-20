@@ -58,4 +58,7 @@ export const zingmp3Api = {
 
     // Lyrics :
     getLyrics: (id) => `${zingmp3Endpoint}/songlyrics/${id}`,
+
+    // search tên nghệ sĩ
+    getArtist: (name) => `${zingmp3Endpoint}/searchtype?keyword=${name}&type=artist`
 };

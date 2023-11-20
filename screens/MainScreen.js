@@ -7,10 +7,30 @@ import LibraryScreen from "./LibraryScreen";
 import IconHome from "../components/icon/IconHome";
 import IconSearch from "../components/icon/IconSearch";
 import IconLibrary from "../components/icon/IconLibrary";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import ArtistListScreen from "./ArtistListScreen";
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+const LibraryStack = () => {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen
+                name="LibraryHome"
+                component={LibraryScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="ArtistListScreen"
+                component={ArtistListScreen}
+                options={{ headerShown: false }}
+            />
+        </Stack.Navigator >
+    );
+};
 
 export default function MainScreen() {
+
     return (
         <Tab.Navigator screenOptions={{ headerShown: false }}>
             <Tab.Screen
@@ -41,7 +61,7 @@ export default function MainScreen() {
             />
             <Tab.Screen
                 name="Library"
-                component={LibraryScreen}
+                component={LibraryStack}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <IconLibrary
