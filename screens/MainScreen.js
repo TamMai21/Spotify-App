@@ -9,6 +9,7 @@ import IconSearch from "../components/icon/IconSearch";
 import IconLibrary from "../components/icon/IconLibrary";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ArtistListScreen from "./ArtistListScreen";
+import ArtistPage from "./ArtisPage";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -24,6 +25,11 @@ const LibraryStack = () => {
                 name="ArtistListScreen"
                 component={ArtistListScreen}
                 options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="ArtistPage"
+                component={ArtistPage}
+                options={{ headerShown: true }}
             />
         </Stack.Navigator >
     );

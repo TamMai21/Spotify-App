@@ -15,6 +15,9 @@ export default function LibraryScreen({ route, navigation }) {
         navigation.navigate('ArtistListScreen', { selectedArtists: selectedArtists });
     };
 
+    const navigateToArtistPage = (artist) => {
+        navigation.navigate('ArtistPage', { artist: artist });
+    };
 
     return (
         <View style={styles.container}>
@@ -28,7 +31,10 @@ export default function LibraryScreen({ route, navigation }) {
                         data={selectedArtists}
                         ItemSeparatorComponent={() => (<View style={{ height: 15 }} />)}
                         renderItem={({ item }) => (
-                            <TouchableOpacity style={styles.musicItemContainer}>
+                            <TouchableOpacity
+                                style={styles.musicItemContainer}
+                                onPress={() => navigateToArtistPage(item)}
+                            >
                                 <Image source={{ uri: item.thumbnail }} style={styles.musicItemImage} />
                                 <View style={styles.itemTextContainer}>
                                     <Text style={styles.itemTitle}>{item.name}</Text>

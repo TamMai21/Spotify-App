@@ -4,7 +4,6 @@ import axios from 'axios';
 import { zingmp3Api } from '../apis/constants';
 
 const ArtistListScreen = ({ route, navigation }) => {
-    console.log(route);
     const [artistData, setArtistData] = useState(null);
     const [selectedArtists, setSelectedArtists] = useState(route.params.selectedArtists);
     const [searchText, setSearchText] = useState('');
@@ -25,6 +24,7 @@ const ArtistListScreen = ({ route, navigation }) => {
 
     const toggleSelection = (artist) => {
         setSelectedArtists((prevSelectedArtists) => {
+            console.log(artist);
             const existingArtist = prevSelectedArtists.find((a) => a.id === artist.id);
             if (existingArtist) {
                 return prevSelectedArtists.filter((a) => a.id !== artist.id);

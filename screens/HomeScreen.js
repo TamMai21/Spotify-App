@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     itemTitle: {
         color: '#fff',
         fontSize: 16,
+        fontWeight: 'bold',
         marginTop: 6
     }
 });
