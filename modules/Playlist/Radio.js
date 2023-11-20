@@ -1,87 +1,26 @@
-import { Pressable, StyleSheet, Text, View, Dimensions } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Image } from "react-native";
-import IconLove from "../components/icon/IconLove";
-import IconShare from "../components/icon/IconShare";
-import IconVerticalThreeDot from "../components/icon/IconVerticalThreeDot";
-import IconPlay from "../components/icon/IconPlay";
 import Swiper from "react-native-swiper/src";
+import { useDispatch } from "react-redux";
+import {
+    setAudioUrl,
+    setIsPlaying,
+    setPlayerData,
+    setRadioUrl,
+    setShowPlayer,
+} from "../../redux-toolkit/playerSlice";
+import { IconEyeOpen } from "../../components/icon";
+import PlaylistHeader from "./PlaylistHeader";
 
 export default function Radio({ data }) {
     const itemData = data?.items;
-    console.log("Radio ~ itemData:", itemData);
+    const dispatch = useDispatch();
     if (!itemData) return null;
     return (
         <View style={styles.container}>
-            <View
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    width: "100%",
-                    height: 300,
-                    background:
-                        "linear-gradient(180deg, #0080AE 0%, rgba(0, 0, 0, 0.00) 100%)",
-                }}
-            >
-                <Image
-                    source={{ uri: itemData[0]?.items[0]?.thumbnailM }}
-                    style={{
-                        position: "absolute",
-                        top: 10,
-                        left: 100,
-                        width: 200,
-                        height: 200,
-                        borderRadius: 9999,
-                        resizeMode: "cover",
-                    }}
-                ></Image>
-            </View>
-            <Text
-                style={{
-                    color: "white",
-                    fontSize: 25,
-                    fontWeight: "bold",
-                    marginTop: 200,
-                }}
-            >
-                Radio Now
-            </Text>
-            <View
-                style={{
-                    marginTop: 10,
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    flexDirection: "row",
-                }}
-            >
-                <View
-                    style={{
-                        flex: 2,
-                        alignItems: "center",
-                        flexDirection: "row",
-                        gap: 25,
-                    }}
-                >
-                    <IconLove></IconLove>
-                    <IconShare></IconShare>
-                    <IconVerticalThreeDot></IconVerticalThreeDot>
-                </View>
-                <Pressable
-                    style={{
-                        alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: "#1ED760",
-                        borderRadius: 9999,
-                        width: 56,
-                        height: 56,
-                    }}
-                >
-                    <IconPlay></IconPlay>
-                </Pressable>
-            </View>
-            <View style={{ marginBottom: 10 }}>
+            <PlaylistHeader data={data} type="radio" />
+            <View style={{ marginBottom: 80 }}>
                 <View>
                     <Text
                         style={{
@@ -98,6 +37,13 @@ export default function Radio({ data }) {
                         {itemData[0]?.items.map((item, index) => {
                             return (
                                 <Pressable
+                                    onPress={() => {
+                                        dispatch(setPlayerData(item));
+                                        dispatch(setShowPlayer(true));
+                                        dispatch(setAudioUrl(""));
+                                        dispatch(setRadioUrl(""));
+                                        dispatch(setIsPlaying(true));
+                                    }}
                                     key={index}
                                     style={{
                                         flex: 1,
@@ -118,9 +64,10 @@ export default function Radio({ data }) {
                                             position: "absolute",
                                             top: 10,
                                             left: 10,
-                                            width: 30,
+                                            width: 100,
                                             height: 30,
                                             borderRadius: 9999,
+                                            flexDirection: "row",
                                             backgroundColor: "red",
                                             alignItems: "center",
                                             justifyContent: "center",
@@ -129,12 +76,20 @@ export default function Radio({ data }) {
                                         <Text
                                             style={{
                                                 color: "white",
-                                                fontSize: 12,
+                                                fontSize: 18,
                                                 fontWeight: 700,
                                                 textAlign: "center",
                                             }}
                                         >
                                             {item?.activeUsers}
+                                        </Text>
+                                        <Text
+                                            style={{
+                                                marginLeft: 5,
+                                                marginTop: 5,
+                                            }}
+                                        >
+                                            <IconEyeOpen />
                                         </Text>
                                     </View>
                                     <View

@@ -1,11 +1,10 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
 import axios from "axios";
-import NewRelease from "../NewRelease";
-import Radio from "../Radio";
-import Hub from "../Hub";
+import NewRelease from "../Playlist/NewRelease";
+import Radio from "../Playlist/Radio";
+import Hub from "../Playlist/Hub";
 
-export default function CategoryDetail({ route }) {
+export default function CategoryDetail({ route, navigation }) {
     const { item } = route.params;
     const [data, setData] = React.useState({});
     useEffect(() => {
@@ -21,18 +20,7 @@ export default function CategoryDetail({ route }) {
         <>
             {item.id === 1 ? <NewRelease data={data} /> : null}
             {item.id === 2 ? <Radio data={data} /> : null}
-            {item.id !== 1 && item.id !== 2 ? <Hub data={data} /> : null}
+            {item.id > 2 ? <Hub data={data} navigation={navigation} /> : null}
         </>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "#000",
-        flex: 1,
-        paddingTop: 40,
-        paddingLeft: 16,
-        paddingRight: 16,
-        overflow: "scroll",
-    },
-});

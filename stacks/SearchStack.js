@@ -4,6 +4,9 @@ import SearchScreen from "../screens/SearchScreen";
 import CategoryDetail from "../modules/Search/CategoryDetail";
 import SearchView from "../modules/Search/SearchView";
 import { View } from "react-native";
+import HeaderSearch from "../modules/Search/HeaderSearch";
+import PlayList from "../modules/Playlist/PlayList";
+import Artist from "../modules/Playlist/Artist";
 
 const Stack = createNativeStackNavigator();
 export default function SearchStack() {
@@ -53,6 +56,44 @@ export default function SearchStack() {
                         backgroundColor: "#000",
                     },
                     headerTitle: () => <HeaderSearch></HeaderSearch>,
+                }}
+            />
+            <Stack.Screen
+                name="PlayList"
+                component={PlayList}
+                options={{
+                    headerTitle: "",
+                    headerBackground: () => {
+                        return (
+                            <View
+                                style={{
+                                    background: "#0080AE",
+                                    flex: 1,
+                                }}
+                            ></View>
+                        );
+                    },
+                    headerTintColor: "white",
+                    headerShadowVisible: false,
+                }}
+            />
+            <Stack.Screen
+                name="Artist"
+                component={Artist}
+                options={{
+                    headerTitle: "",
+                    headerBackground: () => {
+                        return (
+                            <View
+                                style={{
+                                    background: "#0080AE",
+                                    flex: 1,
+                                }}
+                            ></View>
+                        );
+                    },
+                    headerTintColor: "white",
+                    headerShadowVisible: false,
                 }}
             />
         </Stack.Navigator>

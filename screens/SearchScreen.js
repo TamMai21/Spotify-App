@@ -1,7 +1,9 @@
 import {
+    Dimensions,
     FlatList,
     Image,
     Pressable,
+    ScrollView,
     StyleSheet,
     Text,
     View,
@@ -98,7 +100,7 @@ const data = [
 
 export default function SearchScreen({ navigation }) {
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View
                 style={{
                     alignItems: "center",
@@ -165,7 +167,7 @@ export default function SearchScreen({ navigation }) {
                 Browse all
             </Text>
             <FlatList
-                columnWrapperStyle={{ marginRight: 16 }}
+                columnWrapperStyle={{ marginRight: 16, marginLeft: 8 }}
                 numColumns={2}
                 data={data}
                 keyExtractor={(item) => item.id}
@@ -200,7 +202,7 @@ export default function SearchScreen({ navigation }) {
                     </Pressable>
                 )}
             />
-        </View>
+        </ScrollView>
     );
 }
 

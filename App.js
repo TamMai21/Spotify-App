@@ -8,15 +8,18 @@ import { AuthProvider } from "./context/auth-context";
 import ResetPasswordScreen from "./screens/ResetPasswordScreen";
 import MainScreen from "./screens/MainScreen";
 import CategoryDetail from "./modules/Search/CategoryDetail";
-import { TextInput, View } from "react-native";
-import SearchView from "./modules/Search/SearchView";
-import { Pressable } from "react-native";
+import { ScrollView, TextInput, View, Pressable } from "react-native";
 import { Provider } from "react-redux";
 import store from "./redux-toolkit/configureStore";
 import HeaderSearch from "./modules/Search/HeaderSearch";
+import ReactPlayer from "react-player";
+import { useEffect } from "react";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+    }, []);
     return (
         <>
             <Provider store={store}>
