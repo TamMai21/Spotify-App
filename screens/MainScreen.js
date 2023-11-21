@@ -1,15 +1,15 @@
 import { Pressable } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "./HomeScreen";
-import LibraryScreen from "./LibraryScreen";
 import IconHome from "../components/icon/IconHome";
 import IconSearch from "../components/icon/IconSearch";
 import IconLibrary from "../components/icon/IconLibrary";
 import SearchStack from "../stacks/SearchStack";
 import SubPlayer from "../modules/Player/SubPlayer";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import MusicPlayer from "../modules/Player/MusicPlayer";
+import LibraryStack from "../stacks/LibraryStack";
+import HomeStack from "../stacks/HomeStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,19 +27,19 @@ export default function MainScreen() {
                     tabBarStyle: { backgroundColor: "black" },
                 }}
             >
-                {/* <Tab.Screen
+                <Tab.Screen
                     name="Home"
-                    component={HomeScreen}
+                    component={HomeStack}
                     options={{
                         tabBarIcon: ({ focused }) => (
                             <IconHome
-                                color="blue"
+                                color="white"
                                 focused={focused}
-                                size={22}
+                                size={25}
                             ></IconHome>
                         ),
                     }}
-                /> */}
+                />
                 <Tab.Screen
                     name="Search"
                     component={SearchStack}
@@ -58,7 +58,7 @@ export default function MainScreen() {
                 />
                 <Tab.Screen
                     name="Library"
-                    component={LibraryScreen}
+                    component={LibraryStack}
                     options={{
                         tabBarIcon: ({ focused }) => (
                             <IconLibrary

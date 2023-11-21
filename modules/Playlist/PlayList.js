@@ -16,7 +16,7 @@ export default function PlayList({ route }) {
             const res = await axios.get(zingmp3Api.getAlbumPage(id));
             const data = res.data;
             setData(data.data);
-            dispatch(setPlaylist(data.data.song.items));
+            dispatch(setPlaylist(data?.data?.song.items));
         }
         fetchPlayListData();
     }, []);

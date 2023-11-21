@@ -8,25 +8,11 @@ import {
     IconVerticalThreeDot,
 } from "../../components/icon";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    setAudioUrl,
-    setCurrentProgress,
-    setCurrentSongIndex,
-    setIsPlaying,
-    setPlayerData,
-    setRadioUrl,
-    setShowPlayer,
-    setShowSubPlayer,
-} from "../../redux-toolkit/playerSlice";
-import { useEffect } from "react";
 
 export default function PlaylistHeader({ data, type }) {
     if (!data) return null;
-    const playlist = useSelector((state) => state.player.playlist);
     const isPlaying = useSelector((state) => state.player.isPlaying);
-    const currentSongIndex = useSelector(
-        (state) => state.player.currentSongIndex
-    );
+    const dispatch = useDispatch();
     return (
         <>
             <View
@@ -131,7 +117,6 @@ export default function PlaylistHeader({ data, type }) {
                     <IconVerticalThreeDot></IconVerticalThreeDot>
                 </View>
                 <Pressable
-                    onPress={() => dispatch(setIsPlaying(!isPlaying))}
                     style={{
                         alignItems: "center",
                         justifyContent: "center",
