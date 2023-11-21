@@ -297,7 +297,8 @@ export default function MusicPlayer() {
                     >
                         <IconNext
                             fill={
-                                currentSongIndex === playlist.length - 1
+                                currentSongIndex === playlist.length - 1 ||
+                                playlist.length === 0
                                     ? "#A7A7A7"
                                     : "#FFFFFF"
                             }
@@ -340,7 +341,14 @@ export default function MusicPlayer() {
                             } else if (isRandom) {
                                 handleRandomSong();
                             } else {
-                                handleNext();
+                                if (currentSongIndex === playlist.length - 1) {
+                                    dispatch(setCurrentProgress(0));
+                                    dispatch(setCurrentSongIndex(0));
+                                    dispatch(setPlayerData(playlist[0]));
+                                    dispatch(setIsPlaying(false));
+                                } else {
+                                    handleNext();
+                                }
                             }
                         }}
                         onError={() => {

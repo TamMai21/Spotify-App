@@ -12,6 +12,7 @@ import {
     setCurrentSongIndex,
     setIsPlaying,
     setPlayerData,
+    setPlaylist,
     setRadioUrl,
     setShowPlayer,
 } from "../../redux-toolkit/playerSlice";
@@ -114,6 +115,8 @@ export default function SearchView({ navigation }) {
                                     data={data.top}
                                     onPress={() => {
                                         dispatch(setPlayerData(data.top));
+                                        dispatch(setPlaylist([]));
+                                        dispatch(setCurrentSongIndex(0));
                                         dispatch(setAudioUrl(""));
                                         dispatch(setRadioUrl(""));
                                         dispatch(setShowPlayer(true));
@@ -149,6 +152,10 @@ export default function SearchView({ navigation }) {
                                                 onPress={() => {
                                                     dispatch(
                                                         setPlayerData(item)
+                                                    );
+                                                    dispatch(setPlaylist([]));
+                                                    dispatch(
+                                                        setCurrentSongIndex(0)
                                                     );
                                                     dispatch(setAudioUrl(""));
                                                     dispatch(setRadioUrl(""));
@@ -187,7 +194,19 @@ export default function SearchView({ navigation }) {
                         )}
                         {activeOption === "Songs" && (
                             <>
-                                <SongItem data={data.top}></SongItem>
+                                <SongItem
+                                    data={data.top}
+                                    onPress={() => {
+                                        dispatch(setPlayerData(data.top));
+                                        dispatch(setPlaylist([]));
+                                        dispatch(setCurrentSongIndex(0));
+                                        dispatch(setAudioUrl(""));
+                                        dispatch(setRadioUrl(""));
+                                        dispatch(setShowPlayer(true));
+                                        dispatch(setCurrentProgress(0));
+                                        dispatch(setIsPlaying(true));
+                                    }}
+                                ></SongItem>
                                 {data?.songs
                                     ?.slice(0, 20)
                                     .map((item, index) => {
@@ -198,6 +217,10 @@ export default function SearchView({ navigation }) {
                                                 onPress={() => {
                                                     dispatch(
                                                         setPlayerData(item)
+                                                    );
+                                                    dispatch(setPlaylist([]));
+                                                    dispatch(
+                                                        setCurrentSongIndex(0)
                                                     );
                                                     dispatch(setAudioUrl(""));
                                                     dispatch(setRadioUrl(""));

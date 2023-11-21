@@ -17,6 +17,7 @@ import {
     setCurrentSongIndex,
     setIsPlaying,
     setPlayerData,
+    setPlaylist,
     setRadioUrl,
     setShowPlayer,
 } from "../redux-toolkit/playerSlice";
@@ -90,14 +91,15 @@ export default function HomeScreen({ navigation }) {
                                         ? item.items?.all || []
                                         : item.items || []
                                 }
-                                renderItem={({ item, index }) => (
+                                renderItem={({ item }) => (
                                     <Pressable
                                         onPress={() => {
                                             if (item.duration > 0) {
                                                 dispatch(setPlayerData(item));
                                                 dispatch(
-                                                    setCurrentSongIndex(index)
+                                                    setCurrentSongIndex(0)
                                                 );
+                                                dispatch(setPlaylist([]));
                                                 dispatch(setAudioUrl(""));
                                                 dispatch(setRadioUrl(""));
                                                 dispatch(setShowPlayer(true));
