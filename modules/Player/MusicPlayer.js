@@ -16,6 +16,7 @@ import {
     setAudioUrl,
     setCurrentProgress,
     setCurrentSongIndex,
+    setIsLove,
     setIsPlaying,
     setIsRandom,
     setIsRepeat,
@@ -28,9 +29,16 @@ import ReactPlayer from "react-player";
 import fetchPlayerUrl from "../../utils/fetchPlayerUrl";
 import { useLayoutEffect } from "react";
 import Toast from "react-native-toast-message";
+import { useAuth } from "../../context/auth-context";
+import removePlaylistFromUserLibrary from "../../utils/removePlaylistfromUserLibrary";
+import removeSongFromUserLibrary from "../../utils/removeSongfromUserLibrary";
+import addSongIntoUserLibrary from "../../utils/addSongIntoUserLibrary";
 
 export default function MusicPlayer() {
+    const { userInfo, setUserInfo } = useAuth();
+    console.log("MusicPlayer ~ userInfo:", userInfo);
     const data = useSelector((state) => state.player.data);
+    console.log("Song id", data?.encodeId);
     const playlist = useSelector((state) => state.player.playlist);
     const [isReady, setIsReady] = React.useState(false);
     const [showMusicPlayer, setShowMusicPlayer] = React.useState(false);
@@ -44,6 +52,7 @@ export default function MusicPlayer() {
     );
     const isRepeat = useSelector((state) => state.player.isRepeat);
     const isRandom = useSelector((state) => state.player.isRandom);
+    const isLove = useSelector((state) => state.player.isLove);
     fetchPlayerUrl(data);
     const progressArea = React.useRef();
     const progressBar = React.useRef();
@@ -57,11 +66,12 @@ export default function MusicPlayer() {
 
     const handleNext = useCallback(() => {
         if (currentSongIndex < playlist.length - 1) {
+            console.log(currentProgress);
+            dispatch(setCurrentProgress(0));
             dispatch(setCurrentSongIndex(currentSongIndex + 1));
             dispatch(setPlayerData(playlist[currentSongIndex + 1]));
             dispatch(setAudioUrl(""));
             dispatch(setRadioUrl(""));
-            dispatch(setCurrentProgress(0));
             dispatch(setIsPlaying(true));
         }
     }, [currentSongIndex, playlist]);
@@ -113,6 +123,22 @@ export default function MusicPlayer() {
         [progressArea, data?.duration, progressBar]
     );
 
+    React.useEffect(() => {
+        if (userInfo?.Songs?.includes(data?.encodeId)) {
+            dispatch(setIsLove(true));
+        }
+    }, [data?.encodeId]);
+
+    const handleAdd = () => {
+        dispatch(setIsLove(true));
+        addSongIntoUserLibrary(data?.encodeId, userInfo, setUserInfo);
+    };
+
+    const handleRemove = () => {
+        dispatch(setIsLove(false));
+        removeSongFromUserLibrary(data?.encodeId, userInfo, setUserInfo);
+    };
+
     if (!data || !playlist) return null;
     return (
         <View style={styles.container}>
@@ -136,7 +162,7 @@ export default function MusicPlayer() {
                 <Text style={{ color: "white", fontSize: 14, fontWeight: 700 }}>
                     {data.artistsNames}
                 </Text>
-                <Pressable>
+                <Pressable onPress={handleRemove}>
                     <IconVerticalThreeDot></IconVerticalThreeDot>
                 </Pressable>
             </View>
@@ -180,8 +206,8 @@ export default function MusicPlayer() {
                             {data.artistsNames}
                         </Text>
                     </View>
-                    <Pressable>
-                        <IconLove></IconLove>
+                    <Pressable onPress={handleAdd}>
+                        <IconLove fill={isLove ? "red" : "white"}></IconLove>
                     </Pressable>
                 </View>
                 <View style={{ gap: 10, display: radioUrl ? "none" : "flex" }}>
@@ -362,9 +388,10 @@ export default function MusicPlayer() {
                                 topOffset: 30,
                                 bottomOffset: 40,
                             });
+                            dispatch(setIsPlaying(false));
                             setTimeout(() => {
                                 handleNext();
-                            }, 3000);
+                            }, 5000);
                         }}
                     />
                 ) : null}

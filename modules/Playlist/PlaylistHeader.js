@@ -9,30 +9,58 @@ import {
 } from "../../components/icon";
 import { useDispatch, useSelector } from "react-redux";
 import {
+    setCurrentProgress,
     setCurrentSongIndex,
+    setIsLove,
     setIsPlaying,
     setPlayerData,
     setShowSubPlayer,
 } from "../../redux-toolkit/playerSlice";
 import { useEffect } from "react";
+import addPlaylistIntoUserLibrary from "../../utils/addPlaylistIntoUserLibrary";
+import { useAuth } from "../../context/auth-context";
+import removePlaylistFromUserLibrary from "../../utils/removePlaylistfromUserLibrary";
+import Toast from "react-native-toast-message";
 
 export default function PlaylistHeader({ data, type }) {
     if (!data) return null;
+    const { userInfo, setUserInfo } = useAuth();
+    console.log("PlaylistHeader ~ userInfo:", userInfo);
     const isPlaying = useSelector((state) => state.player.isPlaying);
     const playlist = useSelector((state) => state.player.playlist);
     const currentSongIndex = useSelector(
         (state) => state.player.currentSongIndex
     );
+    const isLove = useSelector((state) => state.player.isLove);
+    const playlistId = useSelector((state) => state.player.playlistId);
+    console.log("PlaylistHeader ~ playlistId:", playlistId);
     const dispatch = useDispatch();
     // create a function to autoplay the playlist
     useEffect(() => {
-        if (playlist.length > 0) {
+        if (playlist?.length > 0) {
             dispatch(setPlayerData(playlist[currentSongIndex]));
             dispatch(setCurrentSongIndex(currentSongIndex));
+            dispatch(setCurrentProgress(0));
             dispatch(setShowSubPlayer(true));
             dispatch(setIsPlaying(true));
         }
     }, [playlist, currentSongIndex]);
+
+    useEffect(() => {
+        if (userInfo?.Playlist?.includes(playlistId)) {
+            dispatch(setIsLove(true));
+        }
+    }, [playlistId]);
+
+    const handleAddPlaylist = () => {
+        dispatch(setIsLove(true));
+        addPlaylistIntoUserLibrary(playlistId, userInfo, setUserInfo);
+    };
+
+    const handleRemove = () => {
+        dispatch(setIsLove(false));
+        removePlaylistFromUserLibrary(playlistId, userInfo, setUserInfo);
+    };
 
     return (
         <>
@@ -133,8 +161,12 @@ export default function PlaylistHeader({ data, type }) {
                         gap: 25,
                     }}
                 >
-                    <IconLove></IconLove>
-                    <IconShare></IconShare>
+                    <Pressable onPress={handleAddPlaylist}>
+                        <IconLove fill={isLove ? "red" : "white"}></IconLove>
+                    </Pressable>
+                    <Pressable onPress={handleRemove}>
+                        <IconShare></IconShare>
+                    </Pressable>
                     <IconVerticalThreeDot></IconVerticalThreeDot>
                 </View>
                 <Pressable

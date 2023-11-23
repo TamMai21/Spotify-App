@@ -14,6 +14,8 @@ const playerSlice = createSlice({
         isRepeat: false,
         currentSongIndex: 0,
         playlist: [],
+        playlistId: "",
+        isLove: false,
     },
     reducers: {
         setShowPlayer: (state, action) => {
@@ -49,6 +51,12 @@ const playerSlice = createSlice({
         setPlaylist: (state, action) => {
             state.playlist = action.payload;
         },
+        setPlaylistId: (state, action) => {
+            state.playlistId = action.payload;
+        },
+        setIsLove: (state, action) => {
+            state.isLove = action.payload;
+        },
     },
 });
 
@@ -64,5 +72,7 @@ export const {
     setIsRepeat,
     setCurrentSongIndex,
     setPlaylist,
+    setPlaylistId,
+    setIsLove,
 } = playerSlice.actions;
 export default playerSlice.reducer;

@@ -27,7 +27,7 @@ export default function Header({ title, navigation }) {
                 ></Image>
             </Pressable>
             <Text style={{ fontSize: 18, fontWeight: 700, color: "white" }}>
-                {`${title} ${userInfo.displayName}`}
+                {`${title} ${userInfo?.displayName}`}
             </Text>
         </View>
     );
