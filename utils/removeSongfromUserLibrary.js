@@ -23,7 +23,15 @@ export default async function removeSongFromUserLibrary(
 
         // Check if the Songs array contains the songId
         if (!userDoc.exists() || !userDoc.data().Songs.includes(songId)) {
-            console.log("SongId does not exist in Songs");
+            Toast.show({
+                type: "error",
+                text1: "Thông báo",
+                text2: "Bài hát không tồn tại trong thư viện của bạn",
+                visibilityTime: 2000,
+                autoHide: true,
+                topOffset: 30,
+                bottomOffset: 40,
+            });
             return;
         }
 
@@ -41,8 +49,8 @@ export default async function removeSongFromUserLibrary(
 
         Toast.show({
             type: "success",
-            text1: "Remove song successfully",
-            text2: "Song has been removed from your library",
+            text1: "Thông báo",
+            text2: "Bài hát đã được xóa khỏi thư viện của bạn",
             visibilityTime: 2000,
             autoHide: true,
             topOffset: 30,
@@ -52,8 +60,8 @@ export default async function removeSongFromUserLibrary(
         console.log("error:", error);
         Toast.show({
             type: "error",
-            text1: "Remove song failed",
-            text2: "Something went wrong",
+            text1: "Thông báo",
+            text2: "Đã có lỗi xảy ra, vui lòng thử lại sau",
             visibilityTime: 2000,
             autoHide: true,
             topOffset: 30,

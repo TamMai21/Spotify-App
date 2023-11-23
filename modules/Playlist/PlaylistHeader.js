@@ -38,6 +38,7 @@ export default function PlaylistHeader({ data, type }) {
     // create a function to autoplay the playlist
     useEffect(() => {
         if (playlist?.length > 0) {
+            dispatch(setIsPlaying(false));
             dispatch(setPlayerData(playlist[currentSongIndex]));
             dispatch(setCurrentSongIndex(currentSongIndex));
             dispatch(setCurrentProgress(0));
