@@ -1,5 +1,5 @@
-import { Text, View } from "react-native";
 import { BaseToast, ErrorToast } from "react-native-toast-message";
+
 const toastConfig = {
     success: (props) => (
         <BaseToast
@@ -13,6 +13,7 @@ const toastConfig = {
             text2Style={{
                 fontSize: 14,
                 fontWeight: "400",
+                width: "80%",
             }}
         />
     ),
@@ -22,13 +23,15 @@ const toastConfig = {
             style={{
                 borderLeftColor: "#dc3545",
                 borderLeftWidth: 10,
-                flexWrap: "wrap",
             }}
             text1Style={{
                 fontSize: 16,
+                fontWeight: "500",
             }}
             text2Style={{
                 fontSize: 14,
+                fontWeight: "400",
+                width: "80%",
             }}
         />
     ),
@@ -44,6 +47,7 @@ const toastConfig = {
             text2Style={{
                 fontSize: 14,
                 fontWeight: "400",
+                width: "80%",
             }}
         />
     ),

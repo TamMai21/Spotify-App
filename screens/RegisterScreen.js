@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import InputGroup from "../components/input-group";
 import Button from "../components/button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -10,7 +9,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../utils/firebaseConfig";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import LayoutAuthentication from "../components/layout/LayoutAuthentication";
-import InputPasswordGroup from "../components/input-group/InputPasswordGroup";
+import { InputGroup, InputPasswordGroup } from "../components/input-group";
 
 const schemaValidation = yup.object({
     fullname: yup.string().required("Please enter your full name"),

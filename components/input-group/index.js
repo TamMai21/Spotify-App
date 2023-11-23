@@ -1,3 +1,4 @@
 import InputGroup from "./InputGroup";
+import InputPasswordGroup from "./InputPasswordGroup";
 
-export default InputGroup;
+export { InputGroup, InputPasswordGroup };

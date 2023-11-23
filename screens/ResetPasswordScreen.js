@@ -4,11 +4,11 @@ import LayoutAuthentication from "../components/layout/LayoutAuthentication";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import InputGroup from "../components/input-group";
 import Button from "../components/button";
 import { auth } from "../utils/firebaseConfig";
 import { sendPasswordResetEmail } from "firebase/auth";
 import Toast from "react-native-toast-message";
+import { InputGroup } from "../components/input-group";
 const schemaValidation = yup.object({
     email: yup
         .string()

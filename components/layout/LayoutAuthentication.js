@@ -13,7 +13,8 @@ export default function LayoutAuthentication({ authTitle = "", children }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "flex-start",
+        alignContent: "center",
+        justifyContent: "center",
         gap: "20px",
         padding: "20px",
         backgroundColor: "rgb(15, 23, 42)",

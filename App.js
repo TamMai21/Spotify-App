@@ -14,6 +14,9 @@ import store from "./redux-toolkit/configureStore";
 import HeaderSearch from "./modules/Search/HeaderSearch";
 import ReactPlayer from "react-player";
 import { useEffect } from "react";
+import UserSettingScreen from "./screens/UserSettingScreen";
+import ChangePassword from "./modules/User/ChangePassword";
+import ChangeDisplayName from "./modules/User/ChangeDisplayName";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -26,7 +29,7 @@ export default function App() {
                 <AuthProvider>
                     <NavigationContainer>
                         <Stack.Navigator initialRouteName="App">
-                            {/* <Stack.Screen
+                            <Stack.Screen
                                 name="Login"
                                 component={SignInScreen}
                                 options={{ headerShown: false }}
@@ -40,11 +43,74 @@ export default function App() {
                                 name="Register"
                                 component={RegisterScreen}
                                 options={{ headerShown: false }}
-                            /> */}
+                            />
                             <Stack.Screen
                                 name="Main"
                                 component={MainScreen}
                                 options={{ headerShown: false }}
+                            />
+                            <Stack.Screen
+                                name="UserSetting"
+                                component={UserSettingScreen}
+                                options={{
+                                    headerTintColor: "white",
+                                    headerBackground: () => {
+                                        return (
+                                            <View
+                                                style={{
+                                                    backgroundColor: "#000",
+                                                    flex: 1,
+                                                }}
+                                            ></View>
+                                        );
+                                    },
+                                    headerSearchBarOptions: {
+                                        backgroundColor: "#000",
+                                    },
+                                    headerTitle: "Cài đặt",
+                                }}
+                            />
+                            <Stack.Screen
+                                name="ChangeDisplayName"
+                                component={ChangeDisplayName}
+                                options={{
+                                    headerTintColor: "white",
+                                    headerBackground: () => {
+                                        return (
+                                            <View
+                                                style={{
+                                                    backgroundColor: "#000",
+                                                    flex: 1,
+                                                }}
+                                            ></View>
+                                        );
+                                    },
+                                    headerSearchBarOptions: {
+                                        backgroundColor: "#000",
+                                    },
+                                    headerTitle: "Đổi tên hiển thị",
+                                }}
+                            />
+                            <Stack.Screen
+                                name="ChangePassword"
+                                component={ChangePassword}
+                                options={{
+                                    headerTintColor: "white",
+                                    headerBackground: () => {
+                                        return (
+                                            <View
+                                                style={{
+                                                    backgroundColor: "#000",
+                                                    flex: 1,
+                                                }}
+                                            ></View>
+                                        );
+                                    },
+                                    headerSearchBarOptions: {
+                                        backgroundColor: "#000",
+                                    },
+                                    headerTitle: "Đổi mật khẩu",
+                                }}
                             />
                         </Stack.Navigator>
                     </NavigationContainer>

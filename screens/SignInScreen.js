@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
-import InputGroup from "../components/input-group";
 import Button from "../components/button";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,7 +11,7 @@ import { useAuth } from "../context/auth-context";
 import LayoutAuthentication from "../components/layout/LayoutAuthentication";
 import { doc, setDoc } from "firebase/firestore";
 import IconEyeClose from "../components/icon/IconEyeClose";
-import InputPasswordGroup from "../components/input-group/InputPasswordGroup";
+import { InputGroup, InputPasswordGroup } from "../components/input-group";
 
 const schemaValidation = yup.object({
     password: yup.string().required("Please enter your password"),
@@ -35,7 +34,6 @@ export default function SignInScreen({ navigation }) {
             password: "",
         },
     });
-    const { userInfo } = useAuth();
     const handleSignIn = async (values) => {
         if (!isValid) return;
         try {

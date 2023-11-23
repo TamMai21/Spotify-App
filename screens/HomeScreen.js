@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
     View,
     Text,
-    TouchableOpacity,
     Image,
     ScrollView,
     FlatList,
@@ -22,6 +21,7 @@ import {
     setShowPlayer,
 } from "../redux-toolkit/playerSlice";
 import Header from "../modules/Search/Header";
+import { useAuth } from "../context/auth-context";
 
 export default function HomeScreen({ navigation }) {
     const [homeData, setHomeData] = useState(null);
@@ -75,7 +75,7 @@ export default function HomeScreen({ navigation }) {
 
     return (
         <ScrollView style={styles.container}>
-            <Header title={getCurrentTime()} />
+            <Header title={getCurrentTime()} navigation={navigation} />
             <View style={styles.list}>
                 <FlatList
                     data={homeData}
