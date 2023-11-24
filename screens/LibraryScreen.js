@@ -7,11 +7,16 @@ import {
     TouchableOpacity,
     Image,
 } from "react-native";
-import ArtistListScreen from "./ArtistListScreen";
+import { useAuth } from "../context/auth-context";
+import axios from "axios";
+import { zingmp3Api } from "../apis/constants";
+import Header from "../modules/Search/Header";
 
 export default function LibraryScreen({ route, navigation }) {
     const [selectedArtists, setSelectedArtists] = useState([]);
+    const { userInfo, setUserInfo } = useAuth();
 
+    console.log(userInfo);
     useEffect(() => {
         if (route.params && route.params.selectedArtists) {
             setSelectedArtists(route.params.selectedArtists);
@@ -31,12 +36,41 @@ export default function LibraryScreen({ route, navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.headerText}>Your Library</Text>
-            </View>
+            <Header title={'Library'} navigation={navigation} />
 
             <View style={styles.columnContainer}>
                 <View style={styles.sectionContainer}>
+                    <FlatList
+                        data={userInfo.Playlist}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                style={styles.musicItemContainer}
+                                onPress={() => (
+                                    navigation.navigate(
+                                        "PlayList",
+                                        {
+                                            id: item,
+                                        }
+                                    )
+                                )}
+                            >
+                                <Image
+                                    source={{ uri: item?.thumbnail }}
+                                    style={styles.musicItemImage}
+                                />
+                                <View style={styles.itemTextContainer}>
+                                    <Text style={styles.itemTitle}>
+                                        {item?.title}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                        keyExtractor={(item) => item?.id}
+                        ItemSeparatorComponent={() => (
+                            <View style={{ height: 15 }} />
+                        )}
+                    />
+
                     <FlatList
                         data={selectedArtists}
                         ItemSeparatorComponent={() => (
@@ -73,12 +107,12 @@ export default function LibraryScreen({ route, navigation }) {
                                     +
                                 </Text>
                             </View>
-                            <Text style={styles.addButtonLabel}>Add Music</Text>
+                            <Text style={styles.addButtonLabel}>Add Artist</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </View>
-        </View>
+        </View >
     );
 }
 

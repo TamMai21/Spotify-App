@@ -24,7 +24,7 @@ export default async function removePlaylistFromUserLibrary(
         // Check if the Playlist array contains the playlistId
         if (
             !userDoc.exists() ||
-            !userDoc.data().Playlist.includes(playlistId)
+            !userDoc.data().Playlist?.includes(playlistId)
         ) {
             Toast.show({
                 type: "error",

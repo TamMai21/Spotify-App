@@ -41,7 +41,7 @@ export default async function removeSongFromUserLibrary(
         });
 
         // Update userInfo
-        const newSongs = userInfo.Songs.filter((id) => id !== songId);
+        const newSongs = userInfo.Songs?.filter((id) => id !== songId);
         setUserInfo({
             ...userInfo,
             Songs: newSongs,

@@ -22,7 +22,7 @@ export default async function addPlaylistIntoUserLibrary(
         const userDoc = await getDoc(userRef);
 
         // Check if the Playlist array contains the playlistId
-        if (userDoc.exists() && userDoc.data().Playlist.includes(playlistId)) {
+        if (userDoc.exists() && userDoc.data().Playlist?.includes(playlistId)) {
             Toast.show({
                 type: "success",
                 text1: "Thông báo",
