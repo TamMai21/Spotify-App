@@ -55,7 +55,13 @@ export default function PlaylistHeader({ data, type }) {
 
     const handleAddPlaylist = () => {
         dispatch(setIsLove(true));
-        addPlaylistIntoUserLibrary(playlistId, userInfo, setUserInfo);
+        addPlaylistIntoUserLibrary(
+            playlistId,
+            data?.title,
+            data?.thumbnailM,
+            userInfo,
+            setUserInfo
+        );
     };
 
     const handleRemove = () => {

@@ -10,6 +10,8 @@ import Toast from "react-native-toast-message";
 
 export default async function addSongIntoUserLibrary(
     songId,
+    name,
+    thumbnail,
     userInfo,
     setUserInfo
 ) {
@@ -21,8 +23,14 @@ export default async function addSongIntoUserLibrary(
         // Get the current state of the user's document
         const userDoc = await getDoc(userRef);
 
-        // Check if the Songs array contains the songId
-        if (userDoc.exists() && userDoc.data().Songs?.includes(songId)) {
+        // Create a song object
+        const song = { songId, name, thumbnail };
+
+        // Check if the Songs array contains the song
+        if (
+            userDoc.exists() &&
+            userDoc.data().Songs.some((s) => s.songId === songId)
+        ) {
             Toast.show({
                 type: "success",
                 text1: "Thông báo",
@@ -35,15 +43,15 @@ export default async function addSongIntoUserLibrary(
             return;
         }
 
-        // Update the user's document by adding the songId to the Songs array
+        // Update the user's document by adding the song to the Songs array
         await updateDoc(userRef, {
-            Songs: arrayUnion(songId),
+            Songs: arrayUnion(song),
         });
 
         // Update userInfo
         setUserInfo({
             ...userInfo,
-            Songs: [...(userInfo.Songs || []), songId],
+            Songs: [...(userInfo.Songs || []), song],
         });
 
         Toast.show({

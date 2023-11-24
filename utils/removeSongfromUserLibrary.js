@@ -21,8 +21,9 @@ export default async function removeSongFromUserLibrary(
         // Get the current state of the user's document
         const userDoc = await getDoc(userRef);
 
-        // Check if the Songs array contains the songId
-        if (!userDoc.exists() || !userDoc.data().Songs.includes(songId)) {
+        // Check if the Songs array contains the song
+        const song = userDoc.data().Songs.find((s) => s.songId === songId);
+        if (!userDoc.exists() || !song) {
             Toast.show({
                 type: "error",
                 text1: "Thông báo",
@@ -35,13 +36,13 @@ export default async function removeSongFromUserLibrary(
             return;
         }
 
-        // Update the user's document by removing the songId from the Songs array
+        // Update the user's document by removing the song from the Songs array
         await updateDoc(userRef, {
-            Songs: arrayRemove(songId),
+            Songs: arrayRemove(song),
         });
 
         // Update userInfo
-        const newSongs = userInfo.Songs?.filter((id) => id !== songId);
+        const newSongs = userInfo.Songs.filter((s) => s.songId !== songId);
         setUserInfo({
             ...userInfo,
             Songs: newSongs,

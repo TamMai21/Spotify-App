@@ -21,11 +21,11 @@ export default async function removePlaylistFromUserLibrary(
         // Get the current state of the user's document
         const userDoc = await getDoc(userRef);
 
-        // Check if the Playlist array contains the playlistId
-        if (
-            !userDoc.exists() ||
-            !userDoc.data().Playlist?.includes(playlistId)
-        ) {
+        // Check if the Playlist array contains the playlist
+        const playlist = userDoc
+            .data()
+            .Playlist.find((pl) => pl.playlistId === playlistId);
+        if (!userDoc.exists() || !playlist) {
             Toast.show({
                 type: "error",
                 text1: "Thông báo",
@@ -38,13 +38,15 @@ export default async function removePlaylistFromUserLibrary(
             return;
         }
 
-        // Update the user's document by removing the playlistId from the Playlist array
+        // Update the user's document by removing the playlist from the Playlist array
         await updateDoc(userRef, {
-            Playlist: arrayRemove(playlistId),
+            Playlist: arrayRemove(playlist),
         });
 
         // Update userInfo
-        const newPlaylist = userInfo.Playlist.filter((id) => id !== playlistId);
+        const newPlaylist = userInfo.Playlist.filter(
+            (pl) => pl.playlistId !== playlistId
+        );
         setUserInfo({
             ...userInfo,
             Playlist: newPlaylist,
