@@ -48,10 +48,13 @@ export default function PlaylistHeader({ data, type }) {
     }, [playlist, currentSongIndex]);
 
     useEffect(() => {
-        if (userInfo?.Playlist?.includes(playlistId)) {
+        if (userInfo?.Playlist?.some((pl) => pl.playlistId === playlistId)) {
+            console.log("running");
             dispatch(setIsLove(true));
+        } else {
+            dispatch(setIsLove(false));
         }
-    }, [playlistId]);
+    }, [playlistId, userInfo]);
 
     const handleAddPlaylist = () => {
         dispatch(setIsLove(true));

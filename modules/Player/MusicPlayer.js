@@ -124,10 +124,12 @@ export default function MusicPlayer() {
     );
 
     React.useEffect(() => {
-        if (userInfo?.Songs?.includes(data?.encodeId)) {
+        if (userInfo?.Songs?.some((pl) => pl.songId === data?.encodeId)) {
             dispatch(setIsLove(true));
+        } else {
+            dispatch(setIsLove(false));
         }
-    }, [data?.encodeId]);
+    }, [data?.encodeId, userInfo]);
 
     const handleAdd = () => {
         dispatch(setIsLove(true));
