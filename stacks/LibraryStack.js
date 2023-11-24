@@ -5,6 +5,8 @@ import LibraryScreen from "../screens/LibraryScreen";
 import ArtistListScreen from "../screens/ArtistListScreen";
 import Artist from "../modules/Playlist/Artist";
 import PlayList from "../modules/Playlist/PlayList";
+import CreatePlaylistScreen from "../screens/CreatePlaylistScreen";
+import AddSongToPlaylistScreen from "../screens/AddSongToPlaylistScreen";
 const Stack = createNativeStackNavigator();
 export default function LibraryStack() {
     return (
@@ -56,6 +58,15 @@ export default function LibraryStack() {
                     headerTintColor: "white",
                     headerShadowVisible: false,
                 }}
+            />
+            <Stack.Screen
+                name="CreatePlaylistScreen"
+                component={CreatePlaylistScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="AddSongToPlaylistScreen"
+                component={AddSongToPlaylistScreen}
             />
         </Stack.Navigator>
     );

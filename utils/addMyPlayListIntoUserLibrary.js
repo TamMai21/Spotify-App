@@ -8,25 +8,15 @@ import {
 import { auth, db } from "./firebaseConfig";
 import Toast from "react-native-toast-message";
 
-export default async function addPlaylistIntoUserLibrary(
-    playlistId,
-    name,
-    thumbnail,
-    userInfo,
-    setUserInfo
-) {
+export async function addMyPlayListIntoUserLibrary(playlistId, name, thumbnail, userInfo, setUserInfo) {
     try {
-        // Get a reference to the user's document in the 'users' collection
         const userId = auth.currentUser.uid;
         const userRef = doc(collection(db, "users"), userId);
 
-        // Get the current state of the user's document
         const userDoc = await getDoc(userRef);
 
-        // Create a playlist object
         const playlist = { playlistId, name, thumbnail };
 
-        // Check if the Playlist array contains the playlist
         if (
             userDoc.exists() &&
             userDoc.data().Playlist?.some((pl) => pl.playlistId === playlistId)
@@ -43,15 +33,15 @@ export default async function addPlaylistIntoUserLibrary(
             return;
         }
 
-        // Update the user's document by adding the playlist to the Playlist array
         await updateDoc(userRef, {
-            Playlist: arrayUnion(playlist),
+            MyPlaylist: arrayUnion(playlist),
         });
-        // Update userInfo
+
         setUserInfo({
             ...userInfo,
-            Playlist: [...(userInfo.Playlist || []), playlist],
+            MyPlaylist: [...(userInfo.MyPlaylist || []), playlist],
         });
+
         Toast.show({
             type: "success",
             text1: "Thông báo",

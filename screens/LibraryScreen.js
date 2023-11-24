@@ -6,6 +6,7 @@ import {
     FlatList,
     TouchableOpacity,
     Image,
+    Pressable,
 } from "react-native";
 import { useAuth } from "../context/auth-context";
 import axios from "axios";
@@ -16,7 +17,7 @@ export default function LibraryScreen({ route, navigation }) {
     const [selectedArtists, setSelectedArtists] = useState([]);
     const { userInfo, setUserInfo } = useAuth();
 
-    console.log(userInfo);
+    console.log("test", userInfo.MyPlaylist);
     useEffect(() => {
         if (route.params && route.params.selectedArtists) {
             setSelectedArtists(route.params.selectedArtists);
@@ -34,12 +35,44 @@ export default function LibraryScreen({ route, navigation }) {
         navigation.navigate("ArtistPage", { id: artist.playlistId });
     };
 
+    const handleAddPlaylistPress = () => {
+        navigation.navigate("CreatePlaylistScreen");
+    };
+
     return (
         <View style={styles.container}>
             <Header title={'Library'} navigation={navigation} />
 
+            <Pressable style={{ position: 'absolute', top: 30, right: 20 }} onPress={handleAddPlaylistPress}>
+                <Image source={require('../assets/plus.png')} style={{ width: 20, height: 20 }} />
+            </Pressable>
+
             <View style={styles.columnContainer}>
                 <View style={styles.sectionContainer}>
+                    <FlatList
+                        data={userInfo.MyPlaylist}
+                        ItemSeparatorComponent={() => (
+                            <View style={{ height: 15 }} />
+                        )}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                style={styles.musicItemContainer}
+                                onPress={() => navigateToArtistPage(item)}
+                            >
+                                <Image
+                                    source={{ uri: item.thumbnail }}
+                                    style={styles.playlistItemImage}
+                                />
+                                <View style={styles.itemTextContainer}>
+                                    <Text style={styles.itemTitle}>
+                                        {item.name}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                        keyExtractor={(item) => item.playlistId}
+                    />
+
                     <FlatList
                         data={userInfo.Playlist}
                         renderItem={({ item }) => (
@@ -49,7 +82,7 @@ export default function LibraryScreen({ route, navigation }) {
                                     navigation.navigate(
                                         "PlayList",
                                         {
-                                            id: item,
+                                            id: item.playlistId,
                                         }
                                     )
                                 )}
@@ -60,12 +93,12 @@ export default function LibraryScreen({ route, navigation }) {
                                 />
                                 <View style={styles.itemTextContainer}>
                                     <Text style={styles.itemTitle}>
-                                        {item?.title}
+                                        {item?.name}
                                     </Text>
                                 </View>
                             </TouchableOpacity>
                         )}
-                        keyExtractor={(item) => item?.id}
+                        keyExtractor={(item) => item?.playlistId}
                         ItemSeparatorComponent={() => (
                             <View style={{ height: 15 }} />
                         )}
@@ -135,11 +168,17 @@ const styles = StyleSheet.create({
     },
     sectionContainer: {
         marginBottom: 16,
+        gap: 15
     },
     musicItemContainer: {
         marginRight: 16,
         alignItems: "center",
         flexDirection: "row",
+    },
+    playlistItemImage: {
+        width: 66,
+        height: 64,
+        borderRadius: 10,
     },
     musicItemImage: {
         width: 66,
