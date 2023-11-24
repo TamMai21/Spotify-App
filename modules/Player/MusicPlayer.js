@@ -131,7 +131,13 @@ export default function MusicPlayer() {
 
     const handleAdd = () => {
         dispatch(setIsLove(true));
-        addSongIntoUserLibrary(data?.encodeId, userInfo, setUserInfo);
+        addSongIntoUserLibrary(
+            data?.encodeId,
+            data?.title,
+            data?.thumbnailM,
+            userInfo,
+            setUserInfo
+        );
     };
 
     const handleRemove = () => {

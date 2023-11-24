@@ -10,6 +10,8 @@ import Toast from "react-native-toast-message";
 
 export default async function addPlaylistIntoUserLibrary(
     playlistId,
+    name,
+    thumbnail,
     userInfo,
     setUserInfo
 ) {
@@ -21,8 +23,14 @@ export default async function addPlaylistIntoUserLibrary(
         // Get the current state of the user's document
         const userDoc = await getDoc(userRef);
 
-        // Check if the Playlist array contains the playlistId
-        if (userDoc.exists() && userDoc.data().Playlist.includes(playlistId)) {
+        // Create a playlist object
+        const playlist = { playlistId, name, thumbnail };
+
+        // Check if the Playlist array contains the playlist
+        if (
+            userDoc.exists() &&
+            userDoc.data().Playlist.some((pl) => pl.playlistId === playlistId)
+        ) {
             Toast.show({
                 type: "success",
                 text1: "Thông báo",
@@ -35,14 +43,14 @@ export default async function addPlaylistIntoUserLibrary(
             return;
         }
 
-        // Update the user's document by adding the playlistId to the Playlist array
+        // Update the user's document by adding the playlist to the Playlist array
         await updateDoc(userRef, {
-            Playlist: arrayUnion(playlistId),
+            Playlist: arrayUnion(playlist),
         });
         // Update userInfo
         setUserInfo({
             ...userInfo,
-            Playlist: [...(userInfo.Playlist || []), playlistId],
+            Playlist: [...(userInfo.Playlist || []), playlist],
         });
         Toast.show({
             type: "success",
