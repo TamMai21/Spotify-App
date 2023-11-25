@@ -22,6 +22,7 @@ import {
 } from "../redux-toolkit/playerSlice";
 import Header from "../modules/Search/Header";
 import { useAuth } from "../context/auth-context";
+import SkeletonContent from "react-native-skeleton-content";
 
 export default function HomeScreen({ navigation }) {
     const [homeData, setHomeData] = useState(null);
@@ -75,65 +76,256 @@ export default function HomeScreen({ navigation }) {
 
     return (
         <ScrollView style={styles.container}>
-            <Header title={getCurrentTime()} navigation={navigation} />
-            <View style={styles.list}>
-                <FlatList
-                    data={homeData}
-                    renderItem={({ item }) => (
-                        <View style={styles.section}>
-                            <Text style={styles.sectionTitle}>
-                                {item.title}
-                            </Text>
-                            <FlatList
-                                horizontal={true}
-                                data={
-                                    item.sectionType === "new-release"
-                                        ? item.items?.all || []
-                                        : item.items || []
-                                }
-                                renderItem={({ item }) => (
-                                    <Pressable
-                                        onPress={() => {
-                                            if (item.duration > 0) {
-                                                dispatch(setPlayerData(item));
-                                                dispatch(
-                                                    setCurrentSongIndex(0)
-                                                );
-                                                dispatch(setPlaylist([]));
-                                                dispatch(setAudioUrl(""));
-                                                dispatch(setRadioUrl(""));
-                                                dispatch(setShowPlayer(true));
-                                                dispatch(setCurrentProgress(0));
-                                                dispatch(setIsPlaying(true));
-                                            } else {
-                                                navigation.navigate(
-                                                    "PlayList",
-                                                    {
-                                                        id: item.encodeId,
-                                                    }
-                                                );
-                                            }
-                                        }}
-                                        style={styles.itemContainer}
-                                    >
-                                        <Image
-                                            source={{ uri: item.thumbnailM }}
-                                            style={styles.itemImage}
-                                        />
-                                        <Text
-                                            numberOfLines={2}
-                                            style={styles.itemTitle}
+            <SkeletonContent
+                containerStyle={{ flex: 1 }}
+                isLoading={homeData === null}
+                layout={[
+                    {
+                        key: "section0",
+                        width: "100%",
+                        height: 50,
+                        marginBottom: 30,
+                    },
+                    {
+                        key: "section1",
+                        marginBottom: 20,
+                        children: [
+                            {
+                                key: "sectionTitle1",
+                                width: "50%",
+                                height: 20,
+                                marginBottom: 10,
+                            },
+                            {
+                                key: "itemList1",
+                                width: "100%",
+                                height: 200,
+                                flexDirection: "row",
+                                children: [
+                                    {
+                                        key: "item1",
+                                        width: 168,
+                                        height: 200,
+                                        marginRight: 10,
+                                    },
+                                    {
+                                        key: "item2",
+                                        width: 168,
+                                        height: 200,
+                                        marginRight: 10,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    {
+                        key: "section2",
+                        marginBottom: 20,
+                        children: [
+                            {
+                                key: "sectionTitle2",
+                                width: "50%",
+                                height: 20,
+                                marginBottom: 10,
+                            },
+                            {
+                                key: "itemList2",
+                                width: "100%",
+                                height: 200,
+                                flexDirection: "row",
+                                children: [
+                                    {
+                                        key: "item1",
+                                        width: 168,
+                                        height: 200,
+                                        marginRight: 10,
+                                    },
+                                    {
+                                        key: "item2",
+                                        width: 168,
+                                        height: 200,
+                                        marginRight: 10,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    {
+                        key: "section3",
+                        marginBottom: 20,
+                        children: [
+                            {
+                                key: "sectionTitle3",
+                                width: "50%",
+                                height: 20,
+                                marginBottom: 10,
+                            },
+                            {
+                                key: "itemList3",
+                                width: "100%",
+                                height: 200,
+                                flexDirection: "row",
+                                children: [
+                                    {
+                                        key: "item1",
+                                        width: 168,
+                                        height: 200,
+                                        marginRight: 10,
+                                    },
+                                    {
+                                        key: "item2",
+                                        width: 168,
+                                        height: 200,
+                                        marginRight: 10,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    {
+                        key: "section4",
+                        marginBottom: 20,
+                        children: [
+                            {
+                                key: "sectionTitle4",
+                                width: "50%",
+                                height: 20,
+                                marginBottom: 10,
+                            },
+                            {
+                                key: "itemList4",
+                                width: "100%",
+                                height: 200,
+                                flexDirection: "row",
+                                children: [
+                                    {
+                                        key: "item1",
+                                        width: 168,
+                                        height: 200,
+                                        marginRight: 10,
+                                    },
+                                    {
+                                        key: "item2",
+                                        width: 168,
+                                        height: 200,
+                                        marginRight: 10,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    {
+                        key: "section5",
+                        marginBottom: 20,
+                        children: [
+                            {
+                                key: "sectionTitle5",
+                                width: "50%",
+                                height: 20,
+                                marginBottom: 10,
+                            },
+                            {
+                                key: "itemList5",
+                                width: "100%",
+                                height: 200,
+                                flexDirection: "row",
+                                children: [
+                                    {
+                                        key: "item1",
+                                        width: 168,
+                                        height: 200,
+                                        marginRight: 10,
+                                    },
+                                    {
+                                        key: "item2",
+                                        width: 168,
+                                        height: 200,
+                                        marginRight: 10,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ]}
+            >
+                <Header title={getCurrentTime()} navigation={navigation} />
+                <View style={styles.list}>
+                    <FlatList
+                        data={homeData}
+                        renderItem={({ item }) => (
+                            <View style={styles.section}>
+                                <Text style={styles.sectionTitle}>
+                                    {item.title}
+                                </Text>
+                                <FlatList
+                                    horizontal={true}
+                                    data={
+                                        item.sectionType === "new-release"
+                                            ? item.items?.all || []
+                                            : item.items || []
+                                    }
+                                    renderItem={({ item }) => (
+                                        <Pressable
+                                            onPress={() => {
+                                                if (item.duration > 0) {
+                                                    dispatch(
+                                                        setCurrentProgress(0)
+                                                    );
+                                                    dispatch(
+                                                        setCurrentSongIndex(0)
+                                                    );
+                                                    dispatch(setPlaylist([]));
+                                                    dispatch(
+                                                        setPlayerData(item)
+                                                    );
+                                                    dispatch(setAudioUrl(""));
+                                                    dispatch(setRadioUrl(""));
+                                                    dispatch(
+                                                        setShowPlayer(true)
+                                                    );
+                                                    dispatch(
+                                                        setIsPlaying(true)
+                                                    );
+                                                } else {
+                                                    dispatch(
+                                                        setIsPlaying(false)
+                                                    );
+                                                    dispatch(
+                                                        setCurrentProgress(0)
+                                                    );
+                                                    navigation.navigate(
+                                                        "PlayList",
+                                                        {
+                                                            id: item.encodeId,
+                                                        }
+                                                    );
+                                                }
+                                            }}
+                                            style={styles.itemContainer}
                                         >
-                                            {item.title}
-                                        </Text>
-                                    </Pressable>
-                                )}
-                                keyExtractor={(item, index) => index.toString()}
-                            />
-                        </View>
-                    )}
-                />
-            </View>
+                                            <Image
+                                                source={{
+                                                    uri: item.thumbnailM,
+                                                }}
+                                                style={styles.itemImage}
+                                            />
+                                            <Text
+                                                numberOfLines={2}
+                                                style={styles.itemTitle}
+                                            >
+                                                {item.title}
+                                            </Text>
+                                        </Pressable>
+                                    )}
+                                    keyExtractor={(item, index) =>
+                                        index.toString()
+                                    }
+                                />
+                            </View>
+                        )}
+                    />
+                </View>
+            </SkeletonContent>
         </ScrollView>
     );
 }

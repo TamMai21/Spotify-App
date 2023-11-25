@@ -5,7 +5,6 @@ import { zingmp3Api } from "../../apis/constants";
 import axios from "axios";
 import { IconVerticalThreeDot } from "../../components/icon";
 import { Image } from "react-native";
-import ListMusics from "../Playlist/ListMusics";
 import {
     setAudioUrl,
     setCurrentProgress,
@@ -114,13 +113,13 @@ export default function SearchView({ navigation }) {
                                 <SongItem
                                     data={data.top}
                                     onPress={() => {
-                                        dispatch(setPlayerData(data.top));
-                                        dispatch(setPlaylist([]));
                                         dispatch(setCurrentSongIndex(0));
+                                        dispatch(setCurrentProgress(0));
+                                        dispatch(setPlaylist([]));
+                                        dispatch(setPlayerData(data.top));
                                         dispatch(setAudioUrl(""));
                                         dispatch(setRadioUrl(""));
                                         dispatch(setShowPlayer(true));
-                                        dispatch(setCurrentProgress(0));
                                         dispatch(setIsPlaying(true));
                                     }}
                                 ></SongItem>
@@ -132,6 +131,12 @@ export default function SearchView({ navigation }) {
                                                 data={item}
                                                 key={index}
                                                 onPress={() => {
+                                                    dispatch(
+                                                        setIsPlaying(false)
+                                                    );
+                                                    dispatch(
+                                                        setCurrentProgress(0)
+                                                    );
                                                     navigation.navigate(
                                                         "Artist",
                                                         {
@@ -151,20 +156,19 @@ export default function SearchView({ navigation }) {
                                                 key={index}
                                                 onPress={() => {
                                                     dispatch(
-                                                        setPlayerData(item)
-                                                    );
-                                                    dispatch(setPlaylist([]));
-                                                    dispatch(
                                                         setCurrentSongIndex(0)
-                                                    );
-                                                    dispatch(setAudioUrl(""));
-                                                    dispatch(setRadioUrl(""));
-                                                    dispatch(
-                                                        setShowPlayer(true)
                                                     );
                                                     dispatch(
                                                         setCurrentProgress(0)
                                                     );
+                                                    dispatch(setPlaylist([]));
+                                                    dispatch(
+                                                        setPlayerData(item)
+                                                    );
+                                                    dispatch(setAudioUrl(""));
+                                                    dispatch(setRadioUrl(""));
+                                                    dispatch();
+                                                    setShowPlayer(true);
                                                     dispatch(
                                                         setIsPlaying(true)
                                                     );
@@ -180,6 +184,12 @@ export default function SearchView({ navigation }) {
                                                 data={item}
                                                 key={index}
                                                 onPress={() => {
+                                                    dispatch(
+                                                        setIsPlaying(false)
+                                                    );
+                                                    dispatch(
+                                                        setCurrentProgress(0)
+                                                    );
                                                     navigation.navigate(
                                                         "PlayList",
                                                         {
@@ -197,13 +207,13 @@ export default function SearchView({ navigation }) {
                                 <SongItem
                                     data={data.top}
                                     onPress={() => {
-                                        dispatch(setPlayerData(data.top));
-                                        dispatch(setPlaylist([]));
                                         dispatch(setCurrentSongIndex(0));
+                                        dispatch(setCurrentProgress(0));
+                                        dispatch(setPlaylist([]));
+                                        dispatch(setPlayerData(data.top));
                                         dispatch(setAudioUrl(""));
                                         dispatch(setRadioUrl(""));
                                         dispatch(setShowPlayer(true));
-                                        dispatch(setCurrentProgress(0));
                                         dispatch(setIsPlaying(true));
                                     }}
                                 ></SongItem>
@@ -216,19 +226,19 @@ export default function SearchView({ navigation }) {
                                                 key={index}
                                                 onPress={() => {
                                                     dispatch(
-                                                        setPlayerData(item)
+                                                        setCurrentSongIndex(0)
+                                                    );
+                                                    dispatch(
+                                                        setCurrentProgress(0)
                                                     );
                                                     dispatch(setPlaylist([]));
                                                     dispatch(
-                                                        setCurrentSongIndex(0)
+                                                        setPlayerData(item)
                                                     );
                                                     dispatch(setAudioUrl(""));
                                                     dispatch(setRadioUrl(""));
                                                     dispatch(
                                                         setShowPlayer(true)
-                                                    );
-                                                    dispatch(
-                                                        setCurrentProgress(0)
                                                     );
                                                     dispatch(
                                                         setIsPlaying(true)
@@ -249,6 +259,12 @@ export default function SearchView({ navigation }) {
                                                 data={item}
                                                 key={index}
                                                 onPress={() => {
+                                                    dispatch(
+                                                        setIsPlaying(false)
+                                                    );
+                                                    dispatch(
+                                                        setCurrentProgress(0)
+                                                    );
                                                     navigation.navigate(
                                                         "Artist",
                                                         {
@@ -271,6 +287,12 @@ export default function SearchView({ navigation }) {
                                                 data={item}
                                                 key={index}
                                                 onPress={() => {
+                                                    dispatch(
+                                                        setIsPlaying(false)
+                                                    );
+                                                    dispatch(
+                                                        setCurrentProgress(0)
+                                                    );
                                                     navigation.navigate(
                                                         "PlayList",
                                                         {

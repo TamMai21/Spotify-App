@@ -15,16 +15,16 @@ export default function fetchPlayerUrl(data) {
             if (res.data) {
                 if (res.data.err !== 0) {
                     if (data?.type === "livestream")
-                        dispatch(setRadioUrl(data.streaming));
+                        dispatch(setRadioUrl(data?.streaming));
                     else {
                         dispatch(
                             setAudioUrl(
-                                `http://api.mp3.zing.vn/api/streaming/audio/${data.encodeId}/320`
+                                `http://api.mp3.zing.vn/api/streaming/audio/${data?.encodeId}/320`
                             )
                         );
                     }
                 } else {
-                    dispatch(setAudioUrl(res.data.data[128]));
+                    dispatch(setAudioUrl(res?.data?.data[128]));
                 }
             } else {
                 Toast.show({
@@ -40,5 +40,5 @@ export default function fetchPlayerUrl(data) {
             }
         }
         fetchData();
-    }, [data.encodeId]);
+    }, [data?.encodeId]);
 }

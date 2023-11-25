@@ -5,7 +5,11 @@ import ListMusics from "./ListMusics";
 import axios from "axios";
 import { zingmp3Api } from "../../apis/constants";
 import { useDispatch } from "react-redux";
-import { setPlaylist, setPlaylistId } from "../../redux-toolkit/playerSlice";
+import {
+    setCurrentProgress,
+    setPlaylist,
+    setPlaylistId,
+} from "../../redux-toolkit/playerSlice";
 
 export default function PlayList({ route }) {
     const { id } = route.params;
@@ -18,6 +22,7 @@ export default function PlayList({ route }) {
             setData(data.data);
             dispatch(setPlaylist(data?.data?.song.items));
             dispatch(setPlaylistId(id));
+            dispatch(setCurrentProgress(0));
         }
         fetchPlayListData();
     }, []);
