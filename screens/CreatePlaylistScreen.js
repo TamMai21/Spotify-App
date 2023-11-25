@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import addPlaylistIntoUserLibrary from "../utils/addPlaylistIntoUserLibrary";
@@ -6,15 +6,25 @@ import { useAuth } from "../context/auth-context";
 import { addMyPlayListIntoUserLibrary } from "../utils/addMyPlayListIntoUserlibrary";
 
 export default function CreatePlaylistScreen({ route, navigation }) {
-    const [playlistName, setPlaylistName] = useState("My playlist #1");
+    const [playlistName, setPlaylistName] = useState("");
     const { userInfo, setUserInfo } = useAuth();
+    const [id, setId] = useState()
+
+    useEffect(() => {
+        const id = userInfo.MyPlaylist ? (userInfo.MyPlaylist.length + 1) : 1;
+        setId(id);
+        setPlaylistName("My playlist #" + id)
+    }, [])
+
 
     const handleAddPlaylist = () => {
-        const id = userInfo.myPlaylist ? userInfo.myPlaylist.length + 1 : 1;
-
         addMyPlayListIntoUserLibrary(id, playlistName, 'https://icons-for-free.com/iconfiles/png/512/music+note+sound+icon-1320183235697157602.png', userInfo, setUserInfo);
+        navigation.navigate("LibraryScreen");
+
+        navigation.pop();
 
         navigation.navigate("AddSongToPlaylistScreen", { id: id });
+
     };
 
 
