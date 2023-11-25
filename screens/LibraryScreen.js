@@ -57,7 +57,14 @@ export default function LibraryScreen({ route, navigation }) {
                         renderItem={({ item }) => (
                             <TouchableOpacity
                                 style={styles.musicItemContainer}
-                                onPress={() => navigateToArtistPage(item)}
+                                onPress={() => {
+                                    navigation.navigate(
+                                        "PlayList",
+                                        {
+                                            MyPlaylistId: item.playlistId,
+                                        }
+                                    );
+                                }}
                             >
                                 <Image
                                     source={{ uri: item.thumbnail }}

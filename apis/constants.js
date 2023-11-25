@@ -63,5 +63,8 @@ export const zingmp3Api = {
     getArtist: (name) => `${zingmp3Endpoint}/searchtype?keyword=${name}&type=artist`,
 
     // search tên bài hất
-    getSongs: (name) => `${zingmp3Endpoint}/searchtype?keyword=${name}&type=song`
+    getSongs: (name) => `${zingmp3Endpoint}/searchtype?keyword=${name}&type=song`,
+
+    // get song:
+    getSong: (encodeId) => `https://zing-mp3-api.vercel.app/api/song/info/${encodeId}`
 };

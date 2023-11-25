@@ -22,7 +22,7 @@ import { useAuth } from "../../context/auth-context";
 import removePlaylistFromUserLibrary from "../../utils/removePlaylistfromUserLibrary";
 import Toast from "react-native-toast-message";
 
-export default function PlaylistHeader({ data, type }) {
+export default function PlaylistHeader({ data, type, myPlaylist }) {
     if (!data) return null;
     const { userInfo, setUserInfo } = useAuth();
     console.log("PlaylistHeader ~ userInfo:", userInfo);
@@ -35,6 +35,7 @@ export default function PlaylistHeader({ data, type }) {
     const playlistId = useSelector((state) => state.player.playlistId);
     console.log("PlaylistHeader ~ playlistId:", playlistId);
     const dispatch = useDispatch();
+
     // create a function to autoplay the playlist
     useEffect(() => {
         if (playlist?.length > 0) {
@@ -83,7 +84,7 @@ export default function PlaylistHeader({ data, type }) {
                         "linear-gradient(180deg, #0080AE 0%, rgba(0, 0, 0, 0.00) 100%)",
                 }}
             >
-                {type === "newrelease" && (
+                {!myPlaylist && type === "newrelease" && (
                     <Image
                         source={{ uri: data?.items?.[0].thumbnailM }}
                         style={{
@@ -97,7 +98,7 @@ export default function PlaylistHeader({ data, type }) {
                         }}
                     ></Image>
                 )}
-                {type === "radio" && (
+                {!myPlaylist && type === "radio" && (
                     <Image
                         source={{
                             uri: data?.items?.[0]?.items?.[0]?.thumbnailM,
@@ -113,7 +114,7 @@ export default function PlaylistHeader({ data, type }) {
                         }}
                     ></Image>
                 )}
-                {type === "hub" && (
+                {!myPlaylist && type === "hub" && (
                     <Image
                         source={{ uri: data?.thumbnailHasText }}
                         style={{
@@ -127,9 +128,23 @@ export default function PlaylistHeader({ data, type }) {
                         }}
                     ></Image>
                 )}
-                {type === "playlist" && (
+                {!myPlaylist && type === "playlist" && (
                     <Image
                         source={{ uri: data?.thumbnailM }}
+                        style={{
+                            position: "absolute",
+                            top: 10,
+                            left: 100,
+                            width: 200,
+                            height: 200,
+                            borderRadius: 9999,
+                            resizeMode: "cover",
+                        }}
+                    ></Image>
+                )}
+                {myPlaylist && (
+                    <Image
+                        source={{ uri: data.song.thumbnailM }}
                         style={{
                             position: "absolute",
                             top: 10,
@@ -150,7 +165,8 @@ export default function PlaylistHeader({ data, type }) {
                     marginTop: 200,
                 }}
             >
-                {type === "radio" ? "Radio Now" : data?.title}
+                {!myPlaylist && type === "radio" ? "Radio Now" : data?.title}
+                {myPlaylist && myPlaylist?.name}
             </Text>
             <View
                 style={{

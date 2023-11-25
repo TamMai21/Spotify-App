@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, Image } from "react-native";
 import axios from "axios"; // Make sure to import axios
 import { zingmp3Api } from "../apis/constants";
-import { addSongsToPlaylist } from "../utils/addSongToMyPlaylist";
+import { addSongsToMyPlaylist } from "../utils/addSongToMyPlaylist";
 
 export default function AddSongToPlaylistScreen({ route, navigation }) {
     const [songs, setSongs] = useState([]);
@@ -32,11 +32,11 @@ export default function AddSongToPlaylistScreen({ route, navigation }) {
 
     const handleSongPress = async (selectedSong) => {
         try {
-            // Call the function to add the selected song to the playlist
-            await addSongsToPlaylist(playlistId, [selectedSong]);
-
             // Update the selectedSongs state
             setSelectedSongs(prevSelectedSongs => [...prevSelectedSongs, selectedSong]);
+
+            // Call the function to add the selected song to the playlist
+            await addSongsToMyPlaylist(playlistId, [selectedSong]);
 
             // Optionally, you can show a success message or perform other actions here
 
