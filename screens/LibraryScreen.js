@@ -8,8 +8,10 @@ import {
     Image,
 } from "react-native";
 import ArtistListScreen from "./ArtistListScreen";
-
+import { useAuth } from "../context/auth-context";
+import removeArtistFromUserLibrary from "../utils/removeArtistFromUserLibrary";
 export default function LibraryScreen({ route, navigation }) {
+    const { userInfo, setUserInfo } = useAuth();
     const [selectedArtists, setSelectedArtists] = useState([]);
 
     useEffect(() => {
@@ -74,6 +76,26 @@ export default function LibraryScreen({ route, navigation }) {
                                 </Text>
                             </View>
                             <Text style={styles.addButtonLabel}>Add Music</Text>
+                        </TouchableOpacity>
+                        {/* Test feature remove artist from Artist */}
+                        <TouchableOpacity
+                            style={styles.addButton}
+                            onPress={() =>
+                                removeArtistFromUserLibrary(
+                                    "IWZ997CU",
+                                    userInfo,
+                                    setUserInfo
+                                )
+                            }
+                        >
+                            <View style={styles.musicButtonCircle}>
+                                <Text style={{ fontSize: 36, color: "#fff" }}>
+                                    -
+                                </Text>
+                            </View>
+                            <Text style={styles.addButtonLabel}>
+                                Remove Artist
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
