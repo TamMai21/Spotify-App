@@ -185,7 +185,12 @@ export default function PlaylistHeader({ data, type, myPlaylist }) {
                     }}
                 >
                     <Pressable onPress={handleAddPlaylist}>
-                        <IconLove fill={isLove ? "red" : "white"}></IconLove>
+                        {myPlaylist && (
+                            <Image source={require('../../assets/download-circular-button.png')} style={{ width: 24, height: 24 }} />
+                        )}
+                        {!myPlaylist && (
+                            <IconLove fill={isLove ? "red" : "white"}></IconLove>
+                        )}
                     </Pressable>
                     <Pressable onPress={handleRemove}>
                         <IconShare></IconShare>

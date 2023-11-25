@@ -16,8 +16,7 @@ import Header from "../modules/Search/Header";
 export default function LibraryScreen({ route, navigation }) {
     const [selectedArtists, setSelectedArtists] = useState([]);
     const { userInfo, setUserInfo } = useAuth();
-
-    console.log("test", userInfo.MyPlaylist);
+    var object;
     useEffect(() => {
         if (route.params && route.params.selectedArtists) {
             setSelectedArtists(route.params.selectedArtists);
@@ -54,29 +53,35 @@ export default function LibraryScreen({ route, navigation }) {
                         ItemSeparatorComponent={() => (
                             <View style={{ height: 15 }} />
                         )}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity
-                                style={styles.musicItemContainer}
-                                onPress={() => {
-                                    navigation.navigate(
-                                        "PlayList",
-                                        {
-                                            MyPlaylistId: item.playlistId,
-                                        }
-                                    );
-                                }}
-                            >
-                                <Image
-                                    source={{ uri: item.thumbnail }}
-                                    style={styles.playlistItemImage}
-                                />
-                                <View style={styles.itemTextContainer}>
-                                    <Text style={styles.itemTitle}>
-                                        {item.name}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                        )}
+                        renderItem={({ item }) => {
+                            const playlistSong = userInfo.MyPlaylistSongs.find(
+                                (playlist) => playlist.playlistId === item.playlistId
+                            );
+                            const uri = playlistSong ? playlistSong.song.thumbnailM : item.thumbnail;
+                            return (
+                                <TouchableOpacity
+                                    style={styles.musicItemContainer}
+                                    onPress={() => {
+                                        navigation.navigate(
+                                            "PlayList",
+                                            {
+                                                MyPlaylistId: item.playlistId,
+                                            }
+                                        );
+                                    }}
+                                >
+                                    <Image
+                                        source={{ uri: uri }}
+                                        style={styles.playlistItemImage}
+                                    />
+                                    <View style={styles.itemTextContainer}>
+                                        <Text style={styles.itemTitle}>
+                                            {item.name}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            )
+                        }}
                         keyExtractor={(item) => item.playlistId}
                     />
 
@@ -96,7 +101,7 @@ export default function LibraryScreen({ route, navigation }) {
                             >
                                 <Image
                                     source={{ uri: item?.thumbnail }}
-                                    style={styles.musicItemImage}
+                                    style={styles.playlistItemImage}
                                 />
                                 <View style={styles.itemTextContainer}>
                                     <Text style={styles.itemTitle}>
@@ -186,6 +191,7 @@ const styles = StyleSheet.create({
         width: 66,
         height: 64,
         borderRadius: 10,
+        backgroundColor: '#fff'
     },
     musicItemImage: {
         width: 66,
