@@ -12,9 +12,14 @@ import {
 } from "../../redux-toolkit/playerSlice";
 import SkeletonContent from "react-native-skeleton-content";
 
-export default function ListMusics({ data }) {
+export default function ListMusics({ data, type, onAddMusic }) {
     const dispatch = useDispatch();
-    const isLoading = !data || Object.keys(data).length === 0;
+    const handleAddMusicToMyPlayList = () => {
+        onAddMusic();
+    };
+
+    const isLoading =
+        (!data || Object.keys(data).length === 0) && type !== "myPlaylist";
 
     const skeletonLayout = [
         {
@@ -42,6 +47,43 @@ export default function ListMusics({ data }) {
     ];
     return (
         <View style={{ marginBottom: 80 }}>
+            {type == "myPlaylist" && (
+                <Pressable
+                    style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 10,
+                        marginTop: 10,
+                        flex: 1,
+                    }}
+                    onPress={() => handleAddMusicToMyPlayList()}
+                >
+                    <View
+                        style={{
+                            flex: 1,
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 10,
+                        }}
+                    >
+                        <View style={{ backgroundColor: "#333", padding: 10 }}>
+                            <Image
+                                source={require("../../assets/plus.png")}
+                                style={{ width: 30, height: 30 }}
+                            />
+                        </View>
+                        <Text
+                            style={{
+                                color: "white",
+                                fontSize: 16,
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Thêm vào danh sách phát này
+                        </Text>
+                    </View>
+                </Pressable>
+            )}
             <SkeletonContent
                 containerStyle={{ flex: 1 }}
                 isLoading={isLoading}

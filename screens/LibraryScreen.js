@@ -7,17 +7,18 @@ import {
     TouchableOpacity,
     Image,
     Pressable,
+    ScrollView,
 } from "react-native";
 import ArtistListScreen from "./ArtistListScreen";
 import { useAuth } from "../context/auth-context";
 import removeArtistFromUserLibrary from "../utils/removeArtistFromUserLibrary";
-import { useAuth } from "../context/auth-context";
 import axios from "axios";
 import { zingmp3Api } from "../apis/constants";
 import Header from "../modules/Search/Header";
 
 export default function LibraryScreen({ route, navigation }) {
     const { userInfo, setUserInfo } = useAuth();
+    console.log("LibraryScreen ~ userInfo:", userInfo);
     const [selectedArtists, setSelectedArtists] = useState([]);
     var object;
     useEffect(() => {
@@ -42,11 +43,17 @@ export default function LibraryScreen({ route, navigation }) {
     };
 
     return (
-        <View style={styles.container}>
-            <Header title={'Library'} navigation={navigation} />
+        <ScrollView style={styles.container}>
+            <Header title={"Library"} navigation={navigation} />
 
-            <Pressable style={{ position: 'absolute', top: 30, right: 20 }} onPress={handleAddPlaylistPress}>
-                <Image source={require('../assets/plus.png')} style={{ width: 20, height: 20 }} />
+            <Pressable
+                style={{ position: "absolute", top: 30, right: 20 }}
+                onPress={handleAddPlaylistPress}
+            >
+                <Image
+                    source={require("../assets/plus.png")}
+                    style={{ width: 20, height: 20 }}
+                />
             </Pressable>
 
             <View style={styles.columnContainer}>
@@ -57,20 +64,21 @@ export default function LibraryScreen({ route, navigation }) {
                             <View style={{ height: 15 }} />
                         )}
                         renderItem={({ item }) => {
-                            const playlistSong = userInfo.MyPlaylistSongs.find(
-                                (playlist) => playlist.playlistId === item.playlistId
-                            );
-                            const uri = playlistSong ? playlistSong.song.thumbnailM : item.thumbnail;
+                            const playlistSong =
+                                userInfo?.MyPlaylistSongs?.find(
+                                    (playlist) =>
+                                        playlist.playlistId === item.playlistId
+                                );
+                            const uri = playlistSong
+                                ? playlistSong.song.thumbnailM
+                                : item.thumbnail;
                             return (
                                 <TouchableOpacity
                                     style={styles.musicItemContainer}
                                     onPress={() => {
-                                        navigation.navigate(
-                                            "PlayList",
-                                            {
-                                                MyPlaylistId: item.playlistId,
-                                            }
-                                        );
+                                        navigation.navigate("PlayList", {
+                                            MyPlaylistId: item.playlistId,
+                                        });
                                     }}
                                 >
                                     <Image
@@ -83,7 +91,7 @@ export default function LibraryScreen({ route, navigation }) {
                                         </Text>
                                     </View>
                                 </TouchableOpacity>
-                            )
+                            );
                         }}
                         keyExtractor={(item) => item.playlistId}
                     />
@@ -93,14 +101,11 @@ export default function LibraryScreen({ route, navigation }) {
                         renderItem={({ item }) => (
                             <TouchableOpacity
                                 style={styles.musicItemContainer}
-                                onPress={() => (
-                                    navigation.navigate(
-                                        "PlayList",
-                                        {
-                                            id: item.playlistId,
-                                        }
-                                    )
-                                )}
+                                onPress={() =>
+                                    navigation.navigate("PlayList", {
+                                        id: item.playlistId,
+                                    })
+                                }
                             >
                                 <Image
                                     source={{ uri: item?.thumbnail }}
@@ -155,32 +160,14 @@ export default function LibraryScreen({ route, navigation }) {
                                     +
                                 </Text>
                             </View>
-                            <Text style={styles.addButtonLabel}>Add Artist</Text>
-                        </TouchableOpacity>
-                        {/* Test feature remove artist from Artist */}
-                        <TouchableOpacity
-                            style={styles.addButton}
-                            onPress={() =>
-                                removeArtistFromUserLibrary(
-                                    "IWZ997CU",
-                                    userInfo,
-                                    setUserInfo
-                                )
-                            }
-                        >
-                            <View style={styles.musicButtonCircle}>
-                                <Text style={{ fontSize: 36, color: "#fff" }}>
-                                    -
-                                </Text>
-                            </View>
                             <Text style={styles.addButtonLabel}>
-                                Remove Artist
+                                Add Artist
                             </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 
@@ -203,7 +190,7 @@ const styles = StyleSheet.create({
     },
     sectionContainer: {
         marginBottom: 16,
-        gap: 15
+        gap: 15,
     },
     musicItemContainer: {
         marginRight: 16,
@@ -214,7 +201,7 @@ const styles = StyleSheet.create({
         width: 66,
         height: 64,
         borderRadius: 10,
-        backgroundColor: '#fff'
+        backgroundColor: "#fff",
     },
     musicItemImage: {
         width: 66,

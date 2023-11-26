@@ -63,6 +63,7 @@ export default function MusicPlayer() {
 
     const handleNext = useCallback(() => {
         if (currentSongIndex < playlist.length - 1) {
+            console.log(currentProgress);
             dispatch(setCurrentProgress(0));
             dispatch(setCurrentSongIndex(currentSongIndex + 1));
             dispatch(setPlayerData(playlist[currentSongIndex + 1]));

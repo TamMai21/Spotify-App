@@ -23,7 +23,7 @@ import removePlaylistFromUserLibrary from "../../utils/removePlaylistfromUserLib
 import SkeletonContent from "react-native-skeleton-content";
 
 export default function PlaylistHeader({ data, type, myPlaylist }) {
-    if (!data || Object.keys(data).length === 0) {
+    if ((!data || Object.keys(data).length === 0) && !myPlaylist) {
         console.log("Loading...");
         return (
             <SkeletonContent
@@ -227,9 +227,23 @@ export default function PlaylistHeader({ data, type, myPlaylist }) {
                         }}
                     ></Image>
                 )}
-                {myPlaylist && (
+                {myPlaylist && data?.song && (
                     <Image
                         source={{ uri: data.song.thumbnailM }}
+                        style={{
+                            position: "absolute",
+                            top: 10,
+                            left: 100,
+                            width: 200,
+                            height: 200,
+                            borderRadius: 9999,
+                            resizeMode: "cover",
+                        }}
+                    ></Image>
+                )}
+                {myPlaylist && !data?.song && (
+                    <Image
+                        source={{ uri: myPlaylist.thumbnail }}
                         style={{
                             position: "absolute",
                             top: 10,
@@ -271,10 +285,15 @@ export default function PlaylistHeader({ data, type, myPlaylist }) {
                 >
                     <Pressable onPress={handleAddPlaylist}>
                         {myPlaylist && (
-                            <Image source={require('../../assets/download-circular-button.png')} style={{ width: 24, height: 24 }} />
+                            <Image
+                                source={require("../../assets/download-circular-button.png")}
+                                style={{ width: 24, height: 24 }}
+                            />
                         )}
                         {!myPlaylist && (
-                            <IconLove fill={isLove ? "red" : "white"}></IconLove>
+                            <IconLove
+                                fill={isLove ? "red" : "white"}
+                            ></IconLove>
                         )}
                     </Pressable>
                     <Pressable onPress={handleRemove}>

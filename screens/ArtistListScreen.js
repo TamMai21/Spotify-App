@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
         marginTop: 16,
         width: "50%", // Adjusted width
         alignSelf: "center", // Centered the button
+        marginBottom: 40,
     },
     doneButtonText: {
         color: "#000",

@@ -10,49 +10,73 @@ import {
     setPlaylist,
     setPlaylistId,
 } from "../../redux-toolkit/playerSlice";
-import { setPlaylist, setPlaylistId } from "../../redux-toolkit/playerSlice";
 import { useAuth } from "../../context/auth-context";
+import { useFocusEffect } from "@react-navigation/core";
 
-export default function PlayList({ route }) {
+export default function PlayList({ navigation, route }) {
     const { id, MyPlaylistId } = route.params;
     const [data, setData] = React.useState({});
     const [myPlaylistData, setMyPlaylistData] = useState([]);
+    const [myPlaylist, setMyPlaylist] = useState();
     const dispatch = useDispatch();
     const { userInfo, setUserInfo } = useAuth();
-    const [myPlayListSongs, setMyPlayListSongs] = useState(null)
-    useEffect(() => {
-        async function fetchPlayListData() {
-            if (!MyPlaylistId) {
-                // If MyPlaylistId is not present, fetch data from the API
-                const res = await axios.get(zingmp3Api.getAlbumPage(id));
-                const data = res.data;
-                setData(data.data);
-                dispatch(setPlaylist(data?.data?.song.items));
-                dispatch(setPlaylistId(id));
-                dispatch(setCurrentProgress(0));
-            } else {
-                const myPlaylistData = userInfo?.MyPlaylistSongs.filter(
-                    (item) => item.playlistId === MyPlaylistId
-                );
-                setMyPlaylistData(myPlaylistData);
-                const songDetailsPromises = myPlaylistData.map(async (item) => {
-                    const songRes = await axios.get(zingmp3Api.getSong(item.song.encodeId));
-                    return songRes.data.data;
-                });
+    const [myPlayListSongs, setMyPlayListSongs] = useState(null);
 
-                // Wait for all requests to finish
-                const songDetails = await Promise.all(songDetailsPromises);
-                setMyPlayListSongs({ items: songDetails });
+    const handleAddMusicToMyPlayList = () => {
+        navigation.navigate("AddSongToPlaylistScreen", { id: MyPlaylistId });
+    };
+    useFocusEffect(
+        React.useCallback(() => {
+            async function fetchPlayListData() {
+                if (!MyPlaylistId) {
+                    // If MyPlaylistId is not present, fetch data from the API
+                    const res = await axios.get(zingmp3Api.getAlbumPage(id));
+                    const data = res.data;
+                    setData(data.data);
+                    dispatch(setPlaylist(data?.data?.song.items));
+                    dispatch(setPlaylistId(id));
+                    dispatch(setCurrentProgress(0));
+                } else {
+                    const myPlaylist = userInfo.MyPlaylist.find(
+                        (currentPlaylist) =>
+                            currentPlaylist.playlistId === MyPlaylistId
+                    );
+                    setMyPlaylist(myPlaylist);
+                    if (userInfo?.MyPlaylistSongs) {
+                        const myPlaylistData =
+                            userInfo?.MyPlaylistSongs?.filter(
+                                (item) => item.playlistId === MyPlaylistId
+                            );
+                        setMyPlaylistData(myPlaylistData);
+                        const songDetailsPromises = myPlaylistData?.map(
+                            async (item) => {
+                                const songRes = await axios.get(
+                                    zingmp3Api.getSong(item?.song?.encodeId)
+                                );
+                                return songRes.data.data;
+                            }
+                        );
+
+                        // Wait for all requests to finish
+                        const songDetails = await Promise.all(
+                            songDetailsPromises
+                        );
+                        setMyPlayListSongs({ items: songDetails });
+                    }
+                }
             }
-        }
-        fetchPlayListData();
-    }, []);
+            fetchPlayListData();
+        }, [MyPlaylistId, id, userInfo])
+    );
     return (
         <View style={styles.container}>
             <PlaylistHeader
-                data={MyPlaylistId ? myPlaylistData[0] : data}
-                myPlaylist={userInfo.MyPlaylist.find(MyPlaylist => MyPlaylist.playlistId == MyPlaylistId)}
-                type="playlist" />
+                data={MyPlaylistId ? myPlaylist : data}
+                myPlaylist={userInfo?.MyPlaylist?.find(
+                    (MyPlaylist) => MyPlaylist.playlistId == MyPlaylistId
+                )}
+                type="playlist"
+            />
             {!MyPlaylistId && (
                 <>
                     <ListMusics data={data?.song} />
@@ -60,7 +84,12 @@ export default function PlayList({ route }) {
             )}
             {MyPlaylistId && (
                 <>
-                    <ListMusics data={myPlayListSongs} />
+                    <ListMusics
+                        navigation={navigation}
+                        data={myPlayListSongs}
+                        type="myPlaylist"
+                        onAddMusic={handleAddMusicToMyPlayList}
+                    />
                 </>
             )}
         </View>
