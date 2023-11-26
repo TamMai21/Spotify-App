@@ -14,12 +14,13 @@ import { useAuth } from "../../context/auth-context";
 import { useFocusEffect } from "@react-navigation/core";
 
 export default function PlayList({ navigation, route }) {
-    const { id, MyPlaylistId } = route.params;
+    const { id, MyPlaylistId, type } = route?.params;
     const [data, setData] = React.useState({});
     const [myPlaylistData, setMyPlaylistData] = useState([]);
     const [myPlaylist, setMyPlaylist] = useState();
     const dispatch = useDispatch();
     const { userInfo, setUserInfo } = useAuth();
+    console.log("PlayList ~ userInfo:", userInfo);
     const [myPlayListSongs, setMyPlayListSongs] = useState(null);
 
     const handleAddMusicToMyPlayList = () => {
@@ -70,16 +71,32 @@ export default function PlayList({ navigation, route }) {
     );
     return (
         <View style={styles.container}>
-            <PlaylistHeader
-                data={MyPlaylistId ? myPlaylist : data}
-                myPlaylist={userInfo?.MyPlaylist?.find(
-                    (MyPlaylist) => MyPlaylist.playlistId == MyPlaylistId
-                )}
-                type="playlist"
-            />
+            {type === "liked" && (
+                <PlaylistHeader
+                    data={userInfo?.Songs}
+                    type="playlist"
+                    isLiked={true}
+                />
+            )}
+
+            {type !== "liked" && (
+                <PlaylistHeader
+                    data={MyPlaylistId ? myPlaylist : data}
+                    myPlaylist={userInfo?.MyPlaylist?.find(
+                        (MyPlaylist) => MyPlaylist.playlistId == MyPlaylistId
+                    )}
+                    type="playlist"
+                />
+            )}
+
             {!MyPlaylistId && (
                 <>
                     <ListMusics data={data?.song} />
+                </>
+            )}
+            {!MyPlaylistId && type === "liked" && (
+                <>
+                    <ListMusics data={userInfo?.Songs} type="liked" />
                 </>
             )}
             {MyPlaylistId && (

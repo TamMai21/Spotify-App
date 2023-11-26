@@ -58,6 +58,24 @@ export default function LibraryScreen({ route, navigation }) {
 
             <View style={styles.columnContainer}>
                 <View style={styles.sectionContainer}>
+                    <TouchableOpacity
+                        style={styles.musicItemContainer}
+                        onPress={() => {
+                            navigation.navigate("PlayList", {
+                                type: "liked",
+                            });
+                        }}
+                    >
+                        <Image
+                            source={require("../assets/like_song_thumb.png")}
+                            style={styles.playlistItemImage}
+                        />
+                        <View style={styles.itemTextContainer}>
+                            <Text
+                                style={styles.itemTitle}
+                            >{`Bài hát đã thích`}</Text>
+                        </View>
+                    </TouchableOpacity>
                     <FlatList
                         data={userInfo.MyPlaylist}
                         ItemSeparatorComponent={() => (

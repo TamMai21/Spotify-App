@@ -22,8 +22,8 @@ import { useAuth } from "../../context/auth-context";
 import removePlaylistFromUserLibrary from "../../utils/removePlaylistfromUserLibrary";
 import SkeletonContent from "react-native-skeleton-content";
 
-export default function PlaylistHeader({ data, type, myPlaylist }) {
-    if ((!data || Object.keys(data).length === 0) && !myPlaylist) {
+export default function PlaylistHeader({ data, type, myPlaylist, isLiked }) {
+    if ((!data || Object.keys(data).length === 0) && !myPlaylist && !isLiked) {
         console.log("Loading...");
         return (
             <SkeletonContent
@@ -109,7 +109,6 @@ export default function PlaylistHeader({ data, type, myPlaylist }) {
         );
     }
     const { userInfo, setUserInfo } = useAuth();
-    console.log("PlaylistHeader ~ userInfo:", userInfo);
     const isPlaying = useSelector((state) => state.player.isPlaying);
     const playlist = useSelector((state) => state.player.playlist);
     const currentSongIndex = useSelector(
@@ -117,16 +116,14 @@ export default function PlaylistHeader({ data, type, myPlaylist }) {
     );
     const isLove = useSelector((state) => state.player.isLove);
     const playlistId = useSelector((state) => state.player.playlistId);
-    console.log("PlaylistHeader ~ playlistId:", playlistId);
     const dispatch = useDispatch();
 
     // create a function to autoplay the playlist
     useEffect(() => {
         if (playlist?.length > 0) {
-            dispatch(setIsPlaying(false));
             dispatch(setCurrentProgress(0));
+            dispatch(setCurrentSongIndex(0));
             dispatch(setPlayerData(playlist[currentSongIndex]));
-            dispatch(setCurrentSongIndex(currentSongIndex));
             dispatch(setShowSubPlayer(true));
         }
     }, [playlist, currentSongIndex]);
@@ -244,6 +241,20 @@ export default function PlaylistHeader({ data, type, myPlaylist }) {
                 {myPlaylist && !data?.song && (
                     <Image
                         source={{ uri: myPlaylist.thumbnail }}
+                        style={{
+                            position: "absolute",
+                            top: 10,
+                            left: 100,
+                            width: 200,
+                            height: 200,
+                            borderRadius: 9999,
+                            resizeMode: "cover",
+                        }}
+                    ></Image>
+                )}
+                {!myPlaylist && type === "playlist" && isLiked && (
+                    <Image
+                        source={require("../../assets/like_song_thumb.png")}
                         style={{
                             position: "absolute",
                             top: 10,

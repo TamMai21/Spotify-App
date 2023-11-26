@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
     IconArrowDown,
     IconLove,
@@ -54,8 +54,10 @@ export default function MusicPlayer() {
     const progressArea = React.useRef();
     const progressBar = React.useRef();
     useLayoutEffect(() => {
-        progressBar.current.style.width =
-            (currentProgress / data?.duration) * 100 + "%";
+        if (progressBar.current && progressBar.current.style) {
+            progressBar.current.style.width =
+                (currentProgress / data?.duration) * 100 + "%";
+        }
     }, [currentProgress]);
     const currentSongIndex = useSelector(
         (state) => state.player.currentSongIndex
@@ -63,12 +65,11 @@ export default function MusicPlayer() {
 
     const handleNext = useCallback(() => {
         if (currentSongIndex < playlist.length - 1) {
-            console.log(currentProgress);
             dispatch(setCurrentProgress(0));
             dispatch(setCurrentSongIndex(currentSongIndex + 1));
-            dispatch(setPlayerData(playlist[currentSongIndex + 1]));
             dispatch(setAudioUrl(""));
             dispatch(setRadioUrl(""));
+            dispatch(setPlayerData(playlist[currentSongIndex + 1]));
             dispatch(setIsPlaying(true));
         }
     }, [currentSongIndex, playlist]);

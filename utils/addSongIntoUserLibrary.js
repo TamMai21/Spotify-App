@@ -29,7 +29,7 @@ export default async function addSongIntoUserLibrary(
         // Check if the Songs array contains the song
         if (
             userDoc.exists() &&
-            userDoc.data().Songs.some((s) => s.songId === songId)
+            userDoc.data().Songs?.some((s) => s.songId === songId)
         ) {
             Toast.show({
                 type: "success",

@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
     setAudioUrl,
@@ -13,13 +13,16 @@ import {
 import SkeletonContent from "react-native-skeleton-content";
 
 export default function ListMusics({ data, type, onAddMusic }) {
+    console.log("ListMusics ~ data:", data);
     const dispatch = useDispatch();
     const handleAddMusicToMyPlayList = () => {
         onAddMusic();
     };
-
     const isLoading =
-        (!data || Object.keys(data).length === 0) && type !== "myPlaylist";
+        type !== "myPlaylist" &&
+        type !== "liked" &&
+        (!data || Object.keys(data).length === 0);
+    console.log("ListMusics ~ isLoading:", isLoading);
 
     const skeletonLayout = [
         {
@@ -47,7 +50,7 @@ export default function ListMusics({ data, type, onAddMusic }) {
     ];
     return (
         <View style={{ marginBottom: 80 }}>
-            {type == "myPlaylist" && (
+            {type === "myPlaylist" && (
                 <Pressable
                     style={{
                         flexDirection: "row",
@@ -84,74 +87,145 @@ export default function ListMusics({ data, type, onAddMusic }) {
                     </View>
                 </Pressable>
             )}
-            <SkeletonContent
-                containerStyle={{ flex: 1 }}
-                isLoading={isLoading}
-                layout={skeletonLayout}
-            >
-                {data?.items?.map((item, index) => {
-                    return (
-                        <Pressable
-                            onPress={() => {
-                                dispatch(setIsPlaying(false));
-                                dispatch(setCurrentProgress(0));
-                                dispatch(setCurrentSongIndex(index));
-                                dispatch(setPlayerData(item));
-                                dispatch(setAudioUrl(""));
-                                dispatch(setRadioUrl(""));
-                                dispatch(setShowPlayer(true));
-                                dispatch(setIsPlaying(true));
-                            }}
-                            key={index}
-                            style={{
-                                flexDirection: "row",
-                                alignItems: "center",
-                                gap: 10,
-                                marginTop: 10,
-                            }}
-                        >
-                            <Text
+            {type === "liked"
+                ? data?.map((item, index) => {
+                      return (
+                          <Pressable
+                              onPress={() => {
+                                  dispatch(setIsPlaying(false));
+                                  dispatch(setCurrentProgress(0));
+                                  dispatch(setCurrentSongIndex(index));
+                                  dispatch(setPlayerData(item));
+                                  dispatch(setAudioUrl(""));
+                                  dispatch(setRadioUrl(""));
+                                  dispatch(setShowPlayer(true));
+                                  dispatch(setIsPlaying(true));
+                              }}
+                              key={index}
+                              style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  gap: 10,
+                                  marginTop: 10,
+                              }}
+                          >
+                              <Text
+                                  style={{
+                                      color: "white",
+                                      fontSize: 18,
+                                      fontWeight: "bold",
+                                  }}
+                              >
+                                  {index + 1}
+                              </Text>
+                              <Image
+                                  source={{ uri: item?.thumbnail }}
+                                  style={{
+                                      width: 50,
+                                      height: 50,
+                                      borderRadius: 9999,
+                                      resizeMode: "cover",
+                                  }}
+                              ></Image>
+                              <View style={{ flex: 1 }}>
+                                  <Text
+                                      style={{
+                                          color: "white",
+                                          fontSize: 16,
+                                          fontWeight: "bold",
+                                      }}
+                                  >
+                                      {item?.title}
+                                  </Text>
+                                  <Text
+                                      style={{
+                                          color: "white",
+                                          fontSize: 14,
+                                          fontWeight: "bold",
+                                      }}
+                                  >
+                                      {item?.name}
+                                  </Text>
+                              </View>
+                          </Pressable>
+                      );
+                  })
+                : null}
+
+            {!type && (
+                <SkeletonContent
+                    containerStyle={{ flex: 1 }}
+                    isLoading={
+                        type !== "myPlaylist" &&
+                        type !== "liked" &&
+                        (!data || Object.keys(data).length === 0)
+                    }
+                    layout={skeletonLayout}
+                >
+                    {data?.items?.map((item, index) => {
+                        return (
+                            <Pressable
+                                onPress={() => {
+                                    dispatch(setIsPlaying(false));
+                                    dispatch(setCurrentProgress(0));
+                                    dispatch(setCurrentSongIndex(index));
+                                    dispatch(setPlayerData(item));
+                                    dispatch(setAudioUrl(""));
+                                    dispatch(setRadioUrl(""));
+                                    dispatch(setShowPlayer(true));
+                                    dispatch(setIsPlaying(true));
+                                }}
+                                key={index}
                                 style={{
-                                    color: "white",
-                                    fontSize: 18,
-                                    fontWeight: "bold",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    gap: 10,
+                                    marginTop: 10,
                                 }}
                             >
-                                {index + 1}
-                            </Text>
-                            <Image
-                                source={{ uri: item?.thumbnailM }}
-                                style={{
-                                    width: 50,
-                                    height: 50,
-                                    borderRadius: 9999,
-                                    resizeMode: "cover",
-                                }}
-                            ></Image>
-                            <View style={{ flex: 1 }}>
                                 <Text
                                     style={{
                                         color: "white",
-                                        fontSize: 16,
+                                        fontSize: 18,
                                         fontWeight: "bold",
                                     }}
                                 >
-                                    {item?.title}
+                                    {index + 1}
                                 </Text>
-                                <Text
+                                <Image
+                                    source={{ uri: item?.thumbnailM }}
                                     style={{
-                                        color: "white",
-                                        fontSize: 14,
-                                        fontWeight: "bold",
+                                        width: 50,
+                                        height: 50,
+                                        borderRadius: 9999,
+                                        resizeMode: "cover",
                                     }}
-                                >
-                                    {item?.artistsNames}
-                                </Text>
-                            </View>
-                        </Pressable>
-                    );
-                })}
-            </SkeletonContent>
+                                ></Image>
+                                <View style={{ flex: 1 }}>
+                                    <Text
+                                        style={{
+                                            color: "white",
+                                            fontSize: 16,
+                                            fontWeight: "bold",
+                                        }}
+                                    >
+                                        {item?.title}
+                                    </Text>
+                                    <Text
+                                        style={{
+                                            color: "white",
+                                            fontSize: 14,
+                                            fontWeight: "bold",
+                                        }}
+                                    >
+                                        {item?.artistsNames}
+                                    </Text>
+                                </View>
+                            </Pressable>
+                        );
+                    })}
+                </SkeletonContent>
+            )}
         </View>
     );
 }
