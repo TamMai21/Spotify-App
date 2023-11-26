@@ -67,6 +67,21 @@ export default function LibraryStack() {
             <Stack.Screen
                 name="AddSongToPlaylistScreen"
                 component={AddSongToPlaylistScreen}
+                options={{
+                    headerTitle: "Thêm vào danh sách phát này",
+                    headerBackground: () => {
+                        return (
+                            <View
+                                style={{
+                                    background: "#0080AE",
+                                    flex: 1,
+                                }}
+                            ></View>
+                        );
+                    },
+                    headerTintColor: "white",
+                    headerShadowVisible: false,
+                }}
             />
         </Stack.Navigator>
     );
