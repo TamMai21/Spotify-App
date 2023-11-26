@@ -18,22 +18,29 @@ import axios from "axios";
 import { zingmp3Api } from "../apis/constants";
 import Header from "../modules/Search/Header";
 import removeMyPlaylistSongFromUserLibrary from "../utils/removeMyPlaylistSongFromUserLibrary";
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import {
+    setCurrentProgress,
+    setIsPlaying,
+    setShowSubPlayer,
+} from "../redux-toolkit/playerSlice";
 
 export default function LibraryScreen({ route, navigation }) {
     const { userInfo, setUserInfo } = useAuth();
     console.log("LibraryScreen ~ userInfo:", userInfo);
     const [selectedArtists, setSelectedArtists] = useState(userInfo.Artist);
-    const [playlist, setPlaylist] = useState(userInfo.Playlist)
-    const [myPlaylist, setMyPlaylist] = useState(userInfo.MyPlaylist)
+    const [playlist, setPlaylist] = useState(userInfo.Playlist);
+    const [myPlaylist, setMyPlaylist] = useState(userInfo.MyPlaylist);
+    const dispatch = useDispatch();
 
     useFocusEffect(
         React.useCallback(() => {
             setMyPlaylist(userInfo.MyPlaylist);
             setPlaylist(userInfo.Playlist);
-            setSelectedArtists(userInfo.Artist)
+            setSelectedArtists(userInfo.Artist);
         }, [userInfo, myPlaylist, playlist, selectedArtists])
-    )
+    );
 
     const addMusic = () => {
         navigation.navigate("ArtistListScreen", {
@@ -69,6 +76,9 @@ export default function LibraryScreen({ route, navigation }) {
                     <TouchableOpacity
                         style={styles.musicItemContainer}
                         onPress={() => {
+                            dispatch(setIsPlaying(false));
+                            dispatch(setCurrentProgress(0));
+                            dispatch(setShowSubPlayer(false));
                             navigation.navigate("PlayList", {
                                 type: "liked",
                             });
@@ -102,6 +112,8 @@ export default function LibraryScreen({ route, navigation }) {
                                 <TouchableOpacity
                                     style={styles.musicItemContainer}
                                     onPress={() => {
+                                        dispatch(setIsPlaying(false));
+                                        dispatch(setCurrentProgress(0));
                                         navigation.navigate("PlayList", {
                                             MyPlaylistId: item.playlistId,
                                         });
@@ -116,21 +128,44 @@ export default function LibraryScreen({ route, navigation }) {
                                             {item.name}
                                         </Text>
                                     </View>
-                                    <TouchableOpacity onPress={() => {
-                                        var songs = userInfo.MyPlaylistSongs.filter(songPlaylist => item.playlistId === songPlaylist.playlistId);
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            var songs =
+                                                userInfo.MyPlaylistSongs.filter(
+                                                    (songPlaylist) =>
+                                                        item.playlistId ===
+                                                        songPlaylist.playlistId
+                                                );
 
-                                        removeMyPlayListFromUserLibrary(item.playlistId, userInfo, setUserInfo);
-                                        songs.forEach(song => {
-                                            removeMyPlaylistSongFromUserLibrary(item.playlistId, song.song.encodeId, userInfo, setUserInfo, true);
-                                        });
+                                            removeMyPlayListFromUserLibrary(
+                                                item.playlistId,
+                                                userInfo,
+                                                setUserInfo
+                                            );
+                                            songs.forEach((song) => {
+                                                removeMyPlaylistSongFromUserLibrary(
+                                                    item.playlistId,
+                                                    song.song.encodeId,
+                                                    userInfo,
+                                                    setUserInfo,
+                                                    true
+                                                );
+                                            });
 
-                                        var newMyPlaylist = myPlaylist.filter(playlist =>
-                                            playlist.playlistId !== item.playlistId
-                                        )
+                                            var newMyPlaylist =
+                                                myPlaylist.filter(
+                                                    (playlist) =>
+                                                        playlist.playlistId !==
+                                                        item.playlistId
+                                                );
 
-                                        setMyPlaylist(newMyPlaylist);
-                                    }}>
-                                        <Image source={require('../assets/delete.png')} style={{ width: 30, height: 30 }} />
+                                            setMyPlaylist(newMyPlaylist);
+                                        }}
+                                    >
+                                        <Image
+                                            source={require("../assets/delete.png")}
+                                            style={{ width: 30, height: 30 }}
+                                        />
                                     </TouchableOpacity>
                                 </TouchableOpacity>
                             );
@@ -159,14 +194,26 @@ export default function LibraryScreen({ route, navigation }) {
                                     </Text>
                                 </View>
 
-                                <TouchableOpacity onPress={() => {
-                                    const newPlaylist = playlist.filter(currentPlaylist => {
-                                        currentPlaylist.playlistId != item.playlistId
-                                    })
-                                    setPlaylist(newPlaylist);
-                                    removePlaylistFromUserLibrary(item.playlistId, userInfo, setUserInfo)
-                                }}>
-                                    <Image source={require('../assets/delete.png')} style={{ width: 30, height: 30 }} />
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        const newPlaylist = playlist.filter(
+                                            (currentPlaylist) => {
+                                                currentPlaylist.playlistId !=
+                                                    item.playlistId;
+                                            }
+                                        );
+                                        setPlaylist(newPlaylist);
+                                        removePlaylistFromUserLibrary(
+                                            item.playlistId,
+                                            userInfo,
+                                            setUserInfo
+                                        );
+                                    }}
+                                >
+                                    <Image
+                                        source={require("../assets/delete.png")}
+                                        style={{ width: 30, height: 30 }}
+                                    />
                                 </TouchableOpacity>
                             </TouchableOpacity>
                         )}
@@ -196,14 +243,27 @@ export default function LibraryScreen({ route, navigation }) {
                                     </Text>
                                 </View>
 
-                                <TouchableOpacity onPress={() => {
-                                    const newSelectedArtists = selectedArtists.filter(artist => {
-                                        return artist.artistId !== item.artistId
-                                    });
-                                    setSelectedArtists(newSelectedArtists);
-                                    removeArtistFromUserLibrary(item.artistId, userInfo, setUserInfo)
-                                }}>
-                                    <Image source={require('../assets/delete.png')} style={{ width: 30, height: 30 }} />
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        const newSelectedArtists =
+                                            selectedArtists.filter((artist) => {
+                                                return (
+                                                    artist.artistId !==
+                                                    item.artistId
+                                                );
+                                            });
+                                        setSelectedArtists(newSelectedArtists);
+                                        removeArtistFromUserLibrary(
+                                            item.artistId,
+                                            userInfo,
+                                            setUserInfo
+                                        );
+                                    }}
+                                >
+                                    <Image
+                                        source={require("../assets/delete.png")}
+                                        style={{ width: 30, height: 30 }}
+                                    />
                                 </TouchableOpacity>
                             </TouchableOpacity>
                         )}
@@ -229,7 +289,7 @@ export default function LibraryScreen({ route, navigation }) {
                     </View>
                 </View>
             </View>
-        </ScrollView >
+        </ScrollView>
     );
 }
 
@@ -282,7 +342,7 @@ const styles = StyleSheet.create({
     },
     itemTextContainer: {
         marginLeft: 8,
-        minWidth: 280
+        minWidth: 280,
     },
     itemTitle: {
         color: "#fff",
