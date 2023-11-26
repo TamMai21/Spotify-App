@@ -401,13 +401,21 @@ export default function MusicPlayer() {
                         }}
                     />
                 ) : null}
-                {radioUrl ? (
+                {radioUrl && (
                     <ReactPlayer
                         ref={playerRef}
                         playing={isPlaying}
                         url={radioUrl}
+                        config={{
+                            file: {
+                                hlsOptions: {
+                                    /* hls.js options */
+                                },
+                                hlsVersion: "0.14.17", // version of hls.js
+                            },
+                        }}
                     />
-                ) : null}
+                )}
             </View>
         </View>
     );
