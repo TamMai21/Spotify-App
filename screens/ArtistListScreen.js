@@ -1,17 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, TextInput } from 'react-native';
-import axios from 'axios';
-import { zingmp3Api } from '../apis/constants';
+import React, { useEffect, useState } from "react";
+import {
+    View,
+    Text,
+    Image,
+    StyleSheet,
+    FlatList,
+    TouchableOpacity,
+    TextInput,
+} from "react-native";
+import axios from "axios";
+import { zingmp3Api } from "../apis/constants";
+import { useAuth } from "../context/auth-context";
+import addArtistIntoUserLibrary from "../utils/addArtistIntoUserLibrary";
 
 const ArtistListScreen = ({ route, navigation }) => {
+    const { userInfo, setUserInfo } = useAuth();
+    console.log("ArtistListScreen ~ userInfo:", userInfo);
     const [artistData, setArtistData] = useState(null);
-    const [selectedArtists, setSelectedArtists] = useState(route.params.selectedArtists);
-    const [searchText, setSearchText] = useState('');
+    const [selectedArtists, setSelectedArtists] = useState(
+        route.params.selectedArtists
+    );
+    console.log("ArtistListScreen ~ selectedArtists:", selectedArtists);
+    const [searchText, setSearchText] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const artistResponse = await axios.get(zingmp3Api.getArtist(searchText));
+                const artistResponse = await axios.get(
+                    zingmp3Api.getArtist(searchText)
+                );
                 setArtistData(artistResponse.data.data);
             } catch (error) {
                 console.error(error);
@@ -19,13 +36,14 @@ const ArtistListScreen = ({ route, navigation }) => {
         };
 
         fetchData();
-
     }, [searchText]);
 
     const toggleSelection = (artist) => {
         setSelectedArtists((prevSelectedArtists) => {
             console.log(artist);
-            const existingArtist = prevSelectedArtists.find((a) => a.id === artist.id);
+            const existingArtist = prevSelectedArtists.find(
+                (a) => a.id === artist.id
+            );
             if (existingArtist) {
                 return prevSelectedArtists.filter((a) => a.id !== artist.id);
             } else {
@@ -40,7 +58,10 @@ const ArtistListScreen = ({ route, navigation }) => {
             onPress={() => toggleSelection(item)}
         >
             <View style={styles.artistContainer}>
-                <Image source={{ uri: item.thumbnail }} style={styles.artistImage} />
+                <Image
+                    source={{ uri: item.thumbnail }}
+                    style={styles.artistImage}
+                />
                 {selectedArtists.some((artist) => artist.id === item.id) && (
                     <View style={styles.selectionTick}>
                         <Text style={styles.selectionTickText}>✓</Text>
@@ -52,13 +73,34 @@ const ArtistListScreen = ({ route, navigation }) => {
     );
 
     const handleDone = () => {
-        console.log('Selected Artists:', selectedArtists);
-        navigation.navigate('LibraryHome', { selectedArtists });
+        console.log("Selected Artists:", selectedArtists);
+        if (selectedArtists.length === 0) {
+            navigation.goBack();
+            return;
+        } else {
+            selectedArtists?.forEach(async (artist) => {
+                const artistId = artist.id;
+                const playlistId = artist.playlistId;
+                const name = artist.name;
+                const thumbnail = artist.thumbnailM;
+                addArtistIntoUserLibrary(
+                    artistId,
+                    playlistId,
+                    name,
+                    thumbnail,
+                    userInfo,
+                    setUserInfo
+                );
+            });
+            navigation.navigate("LibraryHome", { selectedArtists });
+        }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.headerText}>Chọn thêm các nghệ sĩ bạn thích.</Text>
+            <Text style={styles.headerText}>
+                Chọn thêm các nghệ sĩ bạn thích.
+            </Text>
             <TextInput
                 style={styles.searchInput}
                 placeholder="Tìm kiếm"
@@ -81,7 +123,6 @@ const ArtistListScreen = ({ route, navigation }) => {
     );
 };
 
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -89,17 +130,17 @@ const styles = StyleSheet.create({
         padding: 16,
     },
     headerText: {
-        color: 'white',
+        color: "white",
         fontSize: 30,
         marginBottom: 8,
     },
     searchInput: {
         minHeight: 40,
-        backgroundColor: 'white',
+        backgroundColor: "white",
         borderWidth: 1,
         marginBottom: 16,
         paddingHorizontal: 8,
-        fontSize: 16
+        fontSize: 16,
     },
     listContainer: {
         marginTop: 16,
@@ -122,29 +163,30 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     selectionTick: {
-        position: 'absolute',
+        position: "absolute",
         top: 8,
         right: 8,
-        backgroundColor: 'white',
+        backgroundColor: "white",
         borderRadius: 25,
         padding: 5,
     },
     selectionTickText: {
-        color: 'black',
+        color: "black",
         fontSize: 12,
     },
     doneButton: {
-        backgroundColor: 'white',
+        backgroundColor: "white",
         padding: 10,
-        alignItems: 'center',
+        alignItems: "center",
         borderRadius: 8,
         marginTop: 16,
-        width: '50%', // Adjusted width
-        alignSelf: 'center', // Centered the button
+        width: "50%", // Adjusted width
+        alignSelf: "center", // Centered the button
+        marginBottom: 40,
     },
     doneButtonText: {
-        color: '#000',
-        fontWeight: 'bold',
+        color: "#000",
+        fontWeight: "bold",
         fontSize: 18,
     },
 });

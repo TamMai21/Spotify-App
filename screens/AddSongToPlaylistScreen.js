@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, Image } from "react-native";
+import {
+    View,
+    Text,
+    FlatList,
+    TouchableOpacity,
+    StyleSheet,
+    TextInput,
+    Image,
+} from "react-native";
 import axios from "axios"; // Make sure to import axios
 import { zingmp3Api } from "../apis/constants";
 import { addSongsToMyPlaylist } from "../utils/addSongToMyPlaylist";
@@ -7,19 +15,23 @@ import { addSongsToMyPlaylist } from "../utils/addSongToMyPlaylist";
 export default function AddSongToPlaylistScreen({ route, navigation }) {
     const [songs, setSongs] = useState([]);
     const [selectedSongs, setSelectedSongs] = useState([]);
-    const [searchText, setSearchText] = useState('');
+    const [searchText, setSearchText] = useState("");
     const playlistId = route.params.id; // Get the playlistId from the route
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const songResponse = await axios.get(zingmp3Api.getSongs(searchText));
-                const filteredSongs = songResponse.data.data.items.map(song => ({
-                    encodeId: song.encodeId,
-                    artistsNames: song.artistsNames,
-                    title: song.title,
-                    thumbnailM: song.thumbnailM
-                }));
+                const songResponse = await axios.get(
+                    zingmp3Api.getSongs(searchText)
+                );
+                const filteredSongs = songResponse.data.data?.items?.map(
+                    (song) => ({
+                        encodeId: song.encodeId,
+                        artistsNames: song.artistsNames,
+                        title: song.title,
+                        thumbnailM: song.thumbnailM,
+                    })
+                );
                 setSongs(filteredSongs);
             } catch (error) {
                 console.error(error);
@@ -27,38 +39,45 @@ export default function AddSongToPlaylistScreen({ route, navigation }) {
         };
 
         fetchData();
-
     }, [searchText]);
 
     const handleSongPress = async (selectedSong) => {
         try {
             // Update the selectedSongs state
-            setSelectedSongs(prevSelectedSongs => [...prevSelectedSongs, selectedSong]);
+            setSelectedSongs((prevSelectedSongs) => [
+                ...prevSelectedSongs,
+                selectedSong,
+            ]);
 
             // Call the function to add the selected song to the playlist
             await addSongsToMyPlaylist(playlistId, [selectedSong]);
 
             // Optionally, you can show a success message or perform other actions here
-
         } catch (error) {
             // Handle the error, show an error message, etc.
             console.error("Failed to add song to playlist:", error);
         }
     };
 
-    const renderItem = ({ item }) => (
-        !selectedSongs.some((selected) => selected.encodeId === item.encodeId) && (
+    const renderItem = ({ item }) =>
+        !selectedSongs.some(
+            (selected) => selected.encodeId === item.encodeId
+        ) && (
             <TouchableOpacity onPress={() => handleSongPress(item)}>
                 <View style={styles.songRow}>
-                    <Image source={{ uri: item.thumbnailM }} style={styles.songImage} />
+                    <Image
+                        source={{ uri: item.thumbnailM }}
+                        style={styles.songImage}
+                    />
                     <View style={styles.songDetails}>
                         <Text style={styles.songTitle}>{item.title}</Text>
-                        <Text style={styles.artistNames}>{item.artistsNames}</Text>
+                        <Text style={styles.artistNames}>
+                            {item.artistsNames}
+                        </Text>
                     </View>
                 </View>
             </TouchableOpacity>
-        )
-    );
+        );
 
     return (
         <View style={styles.container}>

@@ -1,16 +1,16 @@
 import {
-    Dimensions,
     FlatList,
-    Image,
     Pressable,
     ScrollView,
     StyleSheet,
     Text,
-    View,
 } from "react-native";
 import React from "react";
 import { zingmp3Api } from "../apis/constants";
 import Header from "../modules/Search/Header";
+import { useDispatch } from "react-redux";
+import { setCurrentProgress, setIsPlaying } from "../redux-toolkit/playerSlice";
+import { View } from "react-native-web";
 
 const data = [
     {
@@ -100,9 +100,10 @@ const data = [
 ];
 
 export default function SearchScreen({ navigation }) {
+    const dispatch = useDispatch();
     return (
         <ScrollView style={styles.container}>
-            <Header title={"Search"} />
+            <Header title={"Search"} navigation={navigation} />
             <Pressable
                 onPress={() => navigation.navigate("SearchView")}
                 style={{
@@ -145,42 +146,53 @@ export default function SearchScreen({ navigation }) {
             >
                 Browse all
             </Text>
-            <FlatList
-                columnWrapperStyle={{ marginRight: 16, marginLeft: 8 }}
-                numColumns={2}
-                data={data}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <Pressable
-                        onPress={() =>
-                            navigation.navigate("CategoryDetail", { item })
-                        }
-                        style={{
-                            width: 164,
-                            height: 92,
-                            backgroundColor: item.color,
-                            borderRadius: 8,
-                            marginBottom: 16,
-                            paddingLeft: 16,
-                            marginRight: 16,
-                        }}
-                    >
-                        <Text
-                            ellipsizeMode="tail"
-                            numberOfLines={1}
+            <View
+                style={{
+                    marginBottom: 80,
+                }}
+            >
+                <FlatList
+                    columnWrapperStyle={{
+                        marginRight: 16,
+                        marginLeft: 8,
+                    }}
+                    numColumns={2}
+                    data={data}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                        <Pressable
+                            onPress={() => {
+                                dispatch(setIsPlaying(false));
+                                dispatch(setCurrentProgress(0));
+                                navigation.navigate("CategoryDetail", { item });
+                            }}
                             style={{
-                                marginTop: 15,
-                                marginLeft: 5,
-                                fontSize: 16,
-                                fontWeight: "700",
-                                color: "white",
+                                width: 164,
+                                height: 92,
+                                backgroundColor: item.color,
+                                borderRadius: 8,
+                                marginBottom: 16,
+                                paddingLeft: 16,
+                                marginRight: 16,
                             }}
                         >
-                            {item.title}
-                        </Text>
-                    </Pressable>
-                )}
-            />
+                            <Text
+                                ellipsizeMode="tail"
+                                numberOfLines={1}
+                                style={{
+                                    marginTop: 15,
+                                    marginLeft: 5,
+                                    fontSize: 16,
+                                    fontWeight: "700",
+                                    color: "white",
+                                }}
+                            >
+                                {item.title}
+                            </Text>
+                        </Pressable>
+                    )}
+                />
+            </View>
         </ScrollView>
     );
 }

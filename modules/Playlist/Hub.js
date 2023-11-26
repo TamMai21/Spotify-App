@@ -1,16 +1,145 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import Swiper from "react-native-swiper/src";
-import { useDispatch } from "react-redux";
-import { setPlayerData, setPlaylist } from "../../redux-toolkit/playerSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    setCurrentProgress,
+    setCurrentSongIndex,
+    setIsPlaying,
+    setPlayerData,
+    setPlaylist,
+} from "../../redux-toolkit/playerSlice";
 import PlaylistHeader from "./PlaylistHeader";
 import ListMusics from "./ListMusics";
+import SkeletonContent from "react-native-skeleton-content";
 
 export default function Hub({ data, navigation }) {
     const itemData = data?.sections?.slice(0, 2);
-    if (!itemData) return null;
+    if (!itemData) {
+        return (
+            <View style={styles.container}>
+                <SkeletonContent
+                    containerStyle={{ flex: 1, padding: 16 }}
+                    isLoading={true}
+                    layout={[
+                        {
+                            key: "hubSkeleton",
+                            children: [
+                                {
+                                    key: "headerSkeleton",
+                                    width: "100%",
+                                    height: 300,
+                                    children: [
+                                        {
+                                            key: "playlistImage",
+                                            width: 200,
+                                            height: 200,
+                                            borderRadius: 9999,
+                                            marginLeft: 100,
+                                        },
+                                        {
+                                            key: "playlistTitle",
+                                            width: 200,
+                                            height: 20,
+                                            marginTop: 10,
+                                            marginLeft: 10,
+                                        },
+                                        {
+                                            key: "playlistButton",
+                                            width: "100%",
+                                            height: 56,
+                                            marginTop: 10,
+                                            marginLeft: 10,
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            justifyContent: "space-between",
+                                            children: [
+                                                {
+                                                    key: "playlistButtonIcon",
+                                                    flexDirection: "row",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    gap: 25,
+                                                    children: [
+                                                        {
+                                                            key: "playlistButtonIcon1",
+                                                            width: 24,
+                                                            height: 24,
+                                                            borderRadius: 10,
+                                                        },
+                                                        {
+                                                            key: "playlistButtonIcon2",
+                                                            width: 24,
+                                                            height: 24,
+                                                            borderRadius: 10,
+                                                            marginLeft: 10,
+                                                        },
+                                                        {
+                                                            key: "playlistButtonIcon3",
+                                                            width: 24,
+                                                            height: 24,
+                                                            borderRadius: 10,
+                                                            marginLeft: 10,
+                                                        },
+                                                    ],
+                                                },
+                                                {
+                                                    key: "playlistButtonIcon",
+                                                    children: [
+                                                        {
+                                                            key: "playlistButtonIcon1",
+                                                            width: 56,
+                                                            height: 56,
+                                                            borderRadius: 9999,
+                                                        },
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                        {
+                            key: "swiperSkeleton",
+                            width: "100%",
+                            height: 200,
+                            marginTop: 20,
+                        },
+                        {
+                            key: "listMusics",
+                            marginTop: 40,
+                            children: [
+                                ...Array(50)
+                                    .fill()
+                                    .map((_, index) => ({
+                                        key: `musicItem${index}`,
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        children: [
+                                            {
+                                                key: `index${index}`,
+                                                width: "100%",
+                                                height: 50,
+                                                borderRadius: 10,
+                                                marginBottom: 20,
+                                            },
+                                        ],
+                                    })),
+                            ],
+                        },
+                    ]}
+                />
+            </View>
+        );
+    }
     const dispatch = useDispatch();
-    dispatch(setPlaylist(itemData[1]?.items));
+    if (itemData[1]?.items) {
+        dispatch(setPlaylist(itemData[1]?.items));
+        dispatch(setCurrentProgress(0));
+        dispatch(setCurrentSongIndex(0));
+    }
+
     return (
         <View style={styles.container}>
             <PlaylistHeader data={data} type="hub" />
@@ -35,6 +164,9 @@ export default function Hub({ data, navigation }) {
                             return (
                                 <Pressable
                                     onPress={() => {
+                                        dispatch(setIsPlaying(false));
+                                        dispatch(setCurrentProgress(0));
+                                        dispatch(setCurrentSongIndex(0));
                                         navigation.navigate("PlayList", {
                                             id: item.encodeId,
                                         });

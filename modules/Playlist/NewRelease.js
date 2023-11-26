@@ -4,7 +4,6 @@ import PlaylistHeader from "./PlaylistHeader";
 import ListMusics from "./ListMusics";
 import { useDispatch } from "react-redux";
 import { setPlaylist } from "../../redux-toolkit/playerSlice";
-import { useEffect } from "react";
 
 export default function NewRelease({ data }) {
     const dispatch = useDispatch();

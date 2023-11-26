@@ -17,8 +17,6 @@ export default function MainScreen() {
     const showPlayer = useSelector((state) => state.player.showPlayer);
     const playerData = useSelector((state) => state.player.data);
     const showSubPlayer = useSelector((state) => state.player.showSubPlayer);
-    const playlistId = useSelector((state) => state.player.playlistId);
-    console.log("MainScreen ~ playlistId:", playlistId);
     return (
         <>
             <Tab.Navigator
