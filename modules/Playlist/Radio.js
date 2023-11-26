@@ -12,11 +12,107 @@ import {
 } from "../../redux-toolkit/playerSlice";
 import { IconEyeOpen } from "../../components/icon";
 import PlaylistHeader from "./PlaylistHeader";
+import SkeletonContent from "react-native-skeleton-content";
 
 export default function Radio({ data }) {
     const itemData = data?.items;
     const dispatch = useDispatch();
-    if (!itemData) return null;
+    if (!itemData) {
+        return (
+            <View style={styles.container}>
+                <SkeletonContent
+                    containerStyle={{ flex: 1, padding: 16 }}
+                    isLoading={true}
+                    layout={[
+                        {
+                            key: "hubSkeleton",
+                            children: [
+                                {
+                                    key: "headerSkeleton",
+                                    width: "100%",
+                                    height: 300,
+                                    children: [
+                                        {
+                                            key: "playlistImage",
+                                            width: 200,
+                                            height: 200,
+                                            borderRadius: 9999,
+                                            marginLeft: 100,
+                                        },
+                                        {
+                                            key: "playlistTitle",
+                                            width: 200,
+                                            height: 20,
+                                            marginTop: 10,
+                                            marginLeft: 10,
+                                        },
+                                        {
+                                            key: "playlistButton",
+                                            width: "100%",
+                                            height: 56,
+                                            marginTop: 10,
+                                            marginLeft: 10,
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            justifyContent: "space-between",
+                                            children: [
+                                                {
+                                                    key: "playlistButtonIcon",
+                                                    flexDirection: "row",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    gap: 25,
+                                                    children: [
+                                                        {
+                                                            key: "playlistButtonIcon1",
+                                                            width: 24,
+                                                            height: 24,
+                                                            borderRadius: 10,
+                                                        },
+                                                        {
+                                                            key: "playlistButtonIcon2",
+                                                            width: 24,
+                                                            height: 24,
+                                                            borderRadius: 10,
+                                                            marginLeft: 10,
+                                                        },
+                                                        {
+                                                            key: "playlistButtonIcon3",
+                                                            width: 24,
+                                                            height: 24,
+                                                            borderRadius: 10,
+                                                            marginLeft: 10,
+                                                        },
+                                                    ],
+                                                },
+                                                {
+                                                    key: "playlistButtonIcon",
+                                                    children: [
+                                                        {
+                                                            key: "playlistButtonIcon1",
+                                                            width: 56,
+                                                            height: 56,
+                                                            borderRadius: 9999,
+                                                        },
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                        {
+                            key: "swiperSkeleton",
+                            width: "100%",
+                            height: 200,
+                            marginTop: 20,
+                        },
+                    ]}
+                />
+            </View>
+        );
+    }
     return (
         <View style={styles.container}>
             <PlaylistHeader data={data} type="radio" />

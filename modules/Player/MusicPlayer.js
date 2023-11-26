@@ -30,15 +30,12 @@ import fetchPlayerUrl from "../../utils/fetchPlayerUrl";
 import { useLayoutEffect } from "react";
 import Toast from "react-native-toast-message";
 import { useAuth } from "../../context/auth-context";
-import removePlaylistFromUserLibrary from "../../utils/removePlaylistfromUserLibrary";
 import removeSongFromUserLibrary from "../../utils/removeSongfromUserLibrary";
 import addSongIntoUserLibrary from "../../utils/addSongIntoUserLibrary";
 
 export default function MusicPlayer() {
     const { userInfo, setUserInfo } = useAuth();
-    console.log("MusicPlayer ~ userInfo:", userInfo);
     const data = useSelector((state) => state.player.data);
-    console.log("Song id", data?.encodeId);
     const playlist = useSelector((state) => state.player.playlist);
     const [isReady, setIsReady] = React.useState(false);
     const [showMusicPlayer, setShowMusicPlayer] = React.useState(false);
@@ -66,7 +63,6 @@ export default function MusicPlayer() {
 
     const handleNext = useCallback(() => {
         if (currentSongIndex < playlist.length - 1) {
-            console.log(currentProgress);
             dispatch(setCurrentProgress(0));
             dispatch(setCurrentSongIndex(currentSongIndex + 1));
             dispatch(setPlayerData(playlist[currentSongIndex + 1]));
@@ -115,8 +111,10 @@ export default function MusicPlayer() {
             const clickX = event.nativeEvent.offsetX;
             const duration = data?.duration;
             const newProgress = (clickX / width) * duration;
-            progressBar.current.style.width =
-                (newProgress / duration) * 100 + "%";
+            if (progressBar.current && progressBar.current.style) {
+                progressBar.current.style.width =
+                    (newProgress / duration) * 100 + "%";
+            }
             dispatch(setCurrentProgress(newProgress));
             playerRef.current.seekTo(newProgress);
         },
