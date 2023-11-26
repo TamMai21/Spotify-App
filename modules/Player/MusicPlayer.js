@@ -137,6 +137,7 @@ export default function MusicPlayer() {
             data?.encodeId,
             data?.title,
             data?.thumbnailM,
+            data?.artistsNames,
             userInfo,
             setUserInfo
         );

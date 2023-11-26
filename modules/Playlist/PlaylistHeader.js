@@ -125,7 +125,7 @@ export default function PlaylistHeader({ data, type, myPlaylist, isLiked }) {
             dispatch(setPlayerData(playlist[currentSongIndex]));
             dispatch(setShowSubPlayer(true));
         }
-    }, [playlist, currentSongIndex]);
+    }, [playlist]);
 
     useEffect(() => {
         if (userInfo?.Playlist?.some((pl) => pl.playlistId === playlistId)) {

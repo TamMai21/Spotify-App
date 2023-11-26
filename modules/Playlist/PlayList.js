@@ -17,6 +17,8 @@ export default function PlayList({ navigation, route }) {
     const { id, MyPlaylistId, type } = route?.params;
     const [data, setData] = React.useState({});
     const [myPlaylistData, setMyPlaylistData] = useState([]);
+    const [songData, setSongData] = useState([]);
+    console.log("PlayList ~ songData:", songData);
     const [myPlaylist, setMyPlaylist] = useState();
     const dispatch = useDispatch();
     const { userInfo, setUserInfo } = useAuth();
@@ -26,6 +28,22 @@ export default function PlayList({ navigation, route }) {
     const handleAddMusicToMyPlayList = () => {
         navigation.navigate("AddSongToPlaylistScreen", { id: MyPlaylistId });
     };
+
+    useEffect(() => {
+        async function fetchSongData() {
+            if (userInfo?.Songs) {
+                const promises = userInfo.Songs.map((item) =>
+                    axios.get(
+                        `https://zing-mp3-api.vercel.app/api/song/info/${item.songId}`
+                    )
+                );
+                const res = await Promise.all(promises);
+                setSongData(res.map((r) => r.data.data));
+            }
+        }
+        fetchSongData();
+    }, [userInfo?.Songs]);
+
     useFocusEffect(
         React.useCallback(() => {
             async function fetchPlayListData() {
@@ -85,14 +103,14 @@ export default function PlayList({ navigation, route }) {
                     (MyPlaylist) => MyPlaylist.playlistId == MyPlaylistId
                 )}
             /> */}
-            {!MyPlaylistId && (
+            {!MyPlaylistId && type !== "liked" && (
                 <>
                     <ListMusics data={data?.song} />
                 </>
             )}
             {!MyPlaylistId && type === "liked" && (
                 <>
-                    <ListMusics data={userInfo?.Songs} type="liked" />
+                    <ListMusics data={songData} type="liked" />
                 </>
             )}
             {MyPlaylistId && (

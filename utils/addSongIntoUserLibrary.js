@@ -12,6 +12,7 @@ export default async function addSongIntoUserLibrary(
     songId,
     name,
     thumbnail,
+    artistsNames,
     userInfo,
     setUserInfo
 ) {
@@ -24,7 +25,7 @@ export default async function addSongIntoUserLibrary(
         const userDoc = await getDoc(userRef);
 
         // Create a song object
-        const song = { songId, name, thumbnail };
+        const song = { songId, name, thumbnail, artistsNames };
 
         // Check if the Songs array contains the song
         if (
