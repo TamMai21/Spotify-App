@@ -38,32 +38,22 @@ export default function PlayList({ navigation, route }) {
                     dispatch(setPlaylistId(id));
                     dispatch(setCurrentProgress(0));
                 } else {
-                    const myPlaylist = userInfo.MyPlaylist.find(
-                        (currentPlaylist) =>
-                            currentPlaylist.playlistId === MyPlaylistId
+                    const myPlaylistData = userInfo?.MyPlaylistSongs.filter(
+                        (item) => item.playlistId === MyPlaylistId
                     );
-                    setMyPlaylist(myPlaylist);
-                    if (userInfo?.MyPlaylistSongs) {
-                        const myPlaylistData =
-                            userInfo?.MyPlaylistSongs?.filter(
-                                (item) => item.playlistId === MyPlaylistId
+                    setMyPlaylistData(myPlaylistData);
+                    const songDetailsPromises = myPlaylistData.map(
+                        async (item) => {
+                            const songRes = await axios.get(
+                                zingmp3Api.getSong(item.song.encodeId)
                             );
-                        setMyPlaylistData(myPlaylistData);
-                        const songDetailsPromises = myPlaylistData?.map(
-                            async (item) => {
-                                const songRes = await axios.get(
-                                    zingmp3Api.getSong(item?.song?.encodeId)
-                                );
-                                return songRes.data.data;
-                            }
-                        );
+                            return songRes.data.data;
+                        }
+                    );
 
-                        // Wait for all requests to finish
-                        const songDetails = await Promise.all(
-                            songDetailsPromises
-                        );
-                        setMyPlayListSongs({ items: songDetails });
-                    }
+                    // Wait for all requests to finish
+                    const songDetails = await Promise.all(songDetailsPromises);
+                    setMyPlayListSongs({ items: songDetails });
                 }
             }
             fetchPlayListData();
@@ -89,6 +79,12 @@ export default function PlayList({ navigation, route }) {
                 />
             )}
 
+            {/* <PlaylistHeader
+                data={MyPlaylistId ? myPlaylistData[0] : data}
+                myPlaylist={userInfo?.MyPlaylist?.find(
+                    (MyPlaylist) => MyPlaylist.playlistId == MyPlaylistId
+                )}
+            /> */}
             {!MyPlaylistId && (
                 <>
                     <ListMusics data={data?.song} />

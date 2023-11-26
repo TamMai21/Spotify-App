@@ -56,8 +56,7 @@ export default function ListMusics({ data, type, onAddMusic }) {
                         flexDirection: "row",
                         alignItems: "center",
                         gap: 10,
-                        marginTop: 10,
-                        flex: 1,
+                        marginTop: 10
                     }}
                     onPress={() => handleAddMusicToMyPlayList()}
                 >

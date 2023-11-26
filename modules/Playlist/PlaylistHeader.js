@@ -117,7 +117,6 @@ export default function PlaylistHeader({ data, type, myPlaylist, isLiked }) {
     const isLove = useSelector((state) => state.player.isLove);
     const playlistId = useSelector((state) => state.player.playlistId);
     const dispatch = useDispatch();
-
     // create a function to autoplay the playlist
     useEffect(() => {
         if (playlist?.length > 0) {
