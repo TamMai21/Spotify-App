@@ -18,7 +18,13 @@ export default function CreatePlaylistScreen({ route, navigation }) {
     const inputRef = useRef();
 
     useEffect(() => {
-        const id = userInfo.MyPlaylist ? userInfo.MyPlaylist.length + 1 : 1;
+        var id = 1;
+        if (userInfo?.MyPlaylist) {
+            if (userInfo.MyPlaylist.length != 0) {
+                id = userInfo?.MyPlaylist[userInfo?.MyPlaylist.length - 1].playlistId + 1;
+            }
+        }
+        console.log("id", id);
         setId(id);
         setPlaylistName("My playlist #" + id);
     }, []);

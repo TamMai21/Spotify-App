@@ -12,20 +12,28 @@ import {
 import ArtistListScreen from "./ArtistListScreen";
 import { useAuth } from "../context/auth-context";
 import removeArtistFromUserLibrary from "../utils/removeArtistFromUserLibrary";
+import removePlaylistFromUserLibrary from "../utils/removePlaylistfromUserLibrary";
+import removeMyPlayListFromUserLibrary from "../utils/removeMyPlayListFromUserLibrary";
 import axios from "axios";
 import { zingmp3Api } from "../apis/constants";
 import Header from "../modules/Search/Header";
+import removeMyPlaylistSongFromUserLibrary from "../utils/removeMyPlaylistSongFromUserLibrary";
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function LibraryScreen({ route, navigation }) {
     const { userInfo, setUserInfo } = useAuth();
     console.log("LibraryScreen ~ userInfo:", userInfo);
-    const [selectedArtists, setSelectedArtists] = useState([]);
-    var object;
-    useEffect(() => {
-        if (route.params && route.params.selectedArtists) {
-            setSelectedArtists(route.params.selectedArtists);
-        }
-    }, [route.params]);
+    const [selectedArtists, setSelectedArtists] = useState(userInfo.Artist);
+    const [playlist, setPlaylist] = useState(userInfo.Playlist)
+    const [myPlaylist, setMyPlaylist] = useState(userInfo.MyPlaylist)
+
+    useFocusEffect(
+        React.useCallback(() => {
+            setMyPlaylist(userInfo.MyPlaylist);
+            setPlaylist(userInfo.Playlist);
+            setSelectedArtists(userInfo.Artist)
+        }, [userInfo, myPlaylist, playlist, selectedArtists])
+    )
 
     const addMusic = () => {
         navigation.navigate("ArtistListScreen", {
@@ -59,7 +67,7 @@ export default function LibraryScreen({ route, navigation }) {
             <View style={styles.columnContainer}>
                 <View style={styles.sectionContainer}>
                     <FlatList
-                        data={userInfo.MyPlaylist}
+                        data={myPlaylist}
                         ItemSeparatorComponent={() => (
                             <View style={{ height: 15 }} />
                         )}
@@ -90,6 +98,22 @@ export default function LibraryScreen({ route, navigation }) {
                                             {item.name}
                                         </Text>
                                     </View>
+                                    <TouchableOpacity onPress={() => {
+                                        var songs = userInfo.MyPlaylistSongs.filter(songPlaylist => item.playlistId === songPlaylist.playlistId);
+
+                                        removeMyPlayListFromUserLibrary(item.playlistId, userInfo, setUserInfo);
+                                        songs.forEach(song => {
+                                            removeMyPlaylistSongFromUserLibrary(item.playlistId, song.song.encodeId, userInfo, setUserInfo, true);
+                                        });
+
+                                        var newMyPlaylist = myPlaylist.filter(playlist =>
+                                            playlist.playlistId !== item.playlistId
+                                        )
+
+                                        setMyPlaylist(newMyPlaylist);
+                                    }}>
+                                        <Image source={require('../assets/delete.png')} style={{ width: 30, height: 30 }} />
+                                    </TouchableOpacity>
                                 </TouchableOpacity>
                             );
                         }}
@@ -97,7 +121,7 @@ export default function LibraryScreen({ route, navigation }) {
                     />
 
                     <FlatList
-                        data={userInfo.Playlist}
+                        data={playlist}
                         renderItem={({ item }) => (
                             <TouchableOpacity
                                 style={styles.musicItemContainer}
@@ -116,6 +140,16 @@ export default function LibraryScreen({ route, navigation }) {
                                         {item?.name}
                                     </Text>
                                 </View>
+
+                                <TouchableOpacity onPress={() => {
+                                    const newPlaylist = playlist.filter(currentPlaylist => {
+                                        currentPlaylist.playlistId != item.playlistId
+                                    })
+                                    setPlaylist(newPlaylist);
+                                    removePlaylistFromUserLibrary(item.playlistId, userInfo, setUserInfo)
+                                }}>
+                                    <Image source={require('../assets/delete.png')} style={{ width: 30, height: 30 }} />
+                                </TouchableOpacity>
                             </TouchableOpacity>
                         )}
                         keyExtractor={(item) => item?.playlistId}
@@ -143,6 +177,16 @@ export default function LibraryScreen({ route, navigation }) {
                                         {item.name}
                                     </Text>
                                 </View>
+
+                                <TouchableOpacity onPress={() => {
+                                    const newSelectedArtists = selectedArtists.filter(artist => {
+                                        return artist.artistId !== item.artistId
+                                    });
+                                    setSelectedArtists(newSelectedArtists);
+                                    removeArtistFromUserLibrary(item.artistId, userInfo, setUserInfo)
+                                }}>
+                                    <Image source={require('../assets/delete.png')} style={{ width: 30, height: 30 }} />
+                                </TouchableOpacity>
                             </TouchableOpacity>
                         )}
                         keyExtractor={(item) => item.id}
@@ -167,7 +211,7 @@ export default function LibraryScreen({ route, navigation }) {
                     </View>
                 </View>
             </View>
-        </ScrollView>
+        </ScrollView >
     );
 }
 
@@ -220,6 +264,7 @@ const styles = StyleSheet.create({
     },
     itemTextContainer: {
         marginLeft: 8,
+        minWidth: 280
     },
     itemTitle: {
         color: "#fff",
