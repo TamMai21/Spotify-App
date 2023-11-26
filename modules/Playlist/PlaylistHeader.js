@@ -9,11 +9,13 @@ import {
 } from "../../components/icon";
 import { useDispatch, useSelector } from "react-redux";
 import {
+    setAudioUrl,
     setCurrentProgress,
     setCurrentSongIndex,
     setIsLove,
     setIsPlaying,
     setPlayerData,
+    setRadioUrl,
     setShowSubPlayer,
 } from "../../redux-toolkit/playerSlice";
 import { useEffect } from "react";
@@ -122,6 +124,8 @@ export default function PlaylistHeader({ data, type, myPlaylist, isLiked }) {
         if (playlist?.length > 0) {
             dispatch(setCurrentProgress(0));
             dispatch(setCurrentSongIndex(0));
+            dispatch(setAudioUrl(""));
+            dispatch(setRadioUrl(""));
             dispatch(setPlayerData(playlist[currentSongIndex]));
             dispatch(setShowSubPlayer(true));
         }

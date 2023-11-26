@@ -10,13 +10,18 @@ import { useSelector } from "react-redux";
 import MusicPlayer from "../modules/Player/MusicPlayer";
 import LibraryStack from "../stacks/LibraryStack";
 import HomeStack from "../stacks/HomeStack";
+import { useAuth } from "../context/auth-context";
 
 const Tab = createBottomTabNavigator();
 
-export default function MainScreen() {
+export default function MainScreen({ navigation }) {
     const showPlayer = useSelector((state) => state.player.showPlayer);
     const playerData = useSelector((state) => state.player.data);
     const showSubPlayer = useSelector((state) => state.player.showSubPlayer);
+    const { userInfo } = useAuth();
+    if (!userInfo) {
+        navigation.navigate("Login");
+    }
     return (
         <>
             <Tab.Navigator

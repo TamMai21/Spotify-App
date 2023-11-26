@@ -29,16 +29,16 @@ import {
 export default function LibraryScreen({ route, navigation }) {
     const { userInfo, setUserInfo } = useAuth();
     console.log("LibraryScreen ~ userInfo:", userInfo);
-    const [selectedArtists, setSelectedArtists] = useState(userInfo.Artist);
-    const [playlist, setPlaylist] = useState(userInfo.Playlist);
-    const [myPlaylist, setMyPlaylist] = useState(userInfo.MyPlaylist);
+    const [selectedArtists, setSelectedArtists] = useState(userInfo?.Artist);
+    const [playlist, setPlaylist] = useState(userInfo?.Playlist);
+    const [myPlaylist, setMyPlaylist] = useState(userInfo?.MyPlaylist);
     const dispatch = useDispatch();
 
     useFocusEffect(
         React.useCallback(() => {
-            setMyPlaylist(userInfo.MyPlaylist);
-            setPlaylist(userInfo.Playlist);
-            setSelectedArtists(userInfo.Artist);
+            setMyPlaylist(userInfo?.MyPlaylist);
+            setPlaylist(userInfo?.Playlist);
+            setSelectedArtists(userInfo?.Artist);
         }, [userInfo, myPlaylist, playlist, selectedArtists])
     );
 

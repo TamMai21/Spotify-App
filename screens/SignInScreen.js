@@ -22,6 +22,12 @@ const schemaValidation = yup.object({
 });
 
 export default function SignInScreen({ navigation }) {
+    const { userInfo } = useAuth();
+    useEffect(() => {
+        if (userInfo) {
+            navigation.navigate("Main");
+        }
+    }, [userInfo]);
     const {
         handleSubmit,
         formState: { errors, isSubmitting, isValid },
