@@ -143,76 +143,74 @@ export default function ListMusics({ data, type, onAddMusic }) {
                     );
                 })}
 
-            {!type && (
-                <SkeletonContent
-                    containerStyle={{ flex: 1 }}
-                    isLoading={isLoading}
-                    layout={skeletonLayout}
-                >
-                    {data?.items?.map((item, index) => {
-                        return (
-                            <Pressable
-                                onPress={() => {
-                                    dispatch(setIsPlaying(false));
-                                    dispatch(setCurrentProgress(0));
-                                    dispatch(setCurrentSongIndex(index));
-                                    dispatch(setPlayerData(item));
-                                    dispatch(setAudioUrl(""));
-                                    dispatch(setRadioUrl(""));
-                                    dispatch(setShowPlayer(true));
-                                    dispatch(setIsPlaying(true));
-                                }}
-                                key={index}
+            <SkeletonContent
+                containerStyle={{ flex: 1 }}
+                isLoading={isLoading}
+                layout={skeletonLayout}
+            >
+                {data?.items?.map((item, index) => {
+                    return (
+                        <Pressable
+                            onPress={() => {
+                                dispatch(setIsPlaying(false));
+                                dispatch(setCurrentProgress(0));
+                                dispatch(setCurrentSongIndex(index));
+                                dispatch(setPlayerData(item));
+                                dispatch(setAudioUrl(""));
+                                dispatch(setRadioUrl(""));
+                                dispatch(setShowPlayer(true));
+                                dispatch(setIsPlaying(true));
+                            }}
+                            key={index}
+                            style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: 10,
+                                marginTop: 10,
+                            }}
+                        >
+                            <Text
                                 style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    gap: 10,
-                                    marginTop: 10,
+                                    color: "white",
+                                    fontSize: 18,
+                                    fontWeight: "bold",
                                 }}
                             >
+                                {index + 1}
+                            </Text>
+                            <Image
+                                source={{ uri: item?.thumbnailM }}
+                                style={{
+                                    width: 50,
+                                    height: 50,
+                                    borderRadius: 9999,
+                                    resizeMode: "cover",
+                                }}
+                            ></Image>
+                            <View style={{ flex: 1 }}>
                                 <Text
                                     style={{
                                         color: "white",
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         fontWeight: "bold",
                                     }}
                                 >
-                                    {index + 1}
+                                    {item?.title}
                                 </Text>
-                                <Image
-                                    source={{ uri: item?.thumbnailM }}
+                                <Text
                                     style={{
-                                        width: 50,
-                                        height: 50,
-                                        borderRadius: 9999,
-                                        resizeMode: "cover",
+                                        color: "white",
+                                        fontSize: 14,
+                                        fontWeight: "bold",
                                     }}
-                                ></Image>
-                                <View style={{ flex: 1 }}>
-                                    <Text
-                                        style={{
-                                            color: "white",
-                                            fontSize: 16,
-                                            fontWeight: "bold",
-                                        }}
-                                    >
-                                        {item?.title}
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            color: "white",
-                                            fontSize: 14,
-                                            fontWeight: "bold",
-                                        }}
-                                    >
-                                        {item?.artistsNames}
-                                    </Text>
-                                </View>
-                            </Pressable>
-                        );
-                    })}
-                </SkeletonContent>
-            )}
+                                >
+                                    {item?.artistsNames}
+                                </Text>
+                            </View>
+                        </Pressable>
+                    );
+                })}
+            </SkeletonContent>
         </View>
     );
 }

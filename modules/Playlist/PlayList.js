@@ -19,7 +19,6 @@ export default function PlayList({ navigation, route }) {
     const [myPlaylistData, setMyPlaylistData] = useState([]);
     const [songData, setSongData] = useState([]);
     console.log("PlayList ~ songData:", songData);
-    const [myPlaylist, setMyPlaylist] = useState();
     const dispatch = useDispatch();
     const { userInfo, setUserInfo } = useAuth();
     console.log("PlayList ~ userInfo:", userInfo);
@@ -68,7 +67,6 @@ export default function PlayList({ navigation, route }) {
                             return songRes.data.data;
                         }
                     );
-
                     // Wait for all requests to finish
                     const songDetails = await Promise.all(songDetailsPromises);
                     setMyPlayListSongs({ items: songDetails });
@@ -89,7 +87,7 @@ export default function PlayList({ navigation, route }) {
 
             {type !== "liked" && (
                 <PlaylistHeader
-                    data={MyPlaylistId ? myPlaylist : data}
+                    data={MyPlaylistId ? myPlaylistData[0] : data}
                     myPlaylist={userInfo?.MyPlaylist?.find(
                         (MyPlaylist) => MyPlaylist.playlistId == MyPlaylistId
                     )}
@@ -97,12 +95,6 @@ export default function PlayList({ navigation, route }) {
                 />
             )}
 
-            {/* <PlaylistHeader
-                data={MyPlaylistId ? myPlaylistData[0] : data}
-                myPlaylist={userInfo?.MyPlaylist?.find(
-                    (MyPlaylist) => MyPlaylist.playlistId == MyPlaylistId
-                )}
-            /> */}
             {!MyPlaylistId && type !== "liked" && (
                 <>
                     <ListMusics data={data?.song} />
