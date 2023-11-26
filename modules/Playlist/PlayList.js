@@ -7,6 +7,7 @@ import { zingmp3Api } from "../../apis/constants";
 import { useDispatch } from "react-redux";
 import {
     setCurrentProgress,
+    setCurrentSongIndex,
     setPlaylist,
     setPlaylistId,
 } from "../../redux-toolkit/playerSlice";
@@ -31,13 +32,14 @@ export default function PlayList({ navigation, route }) {
     useEffect(() => {
         async function fetchSongData() {
             if (userInfo?.Songs) {
-                const promises = userInfo.Songs.map((item) =>
+                const promises = userInfo?.Songs?.map((item) =>
                     axios.get(
                         `https://zing-mp3-api.vercel.app/api/song/info/${item.songId}`
                     )
                 );
                 const res = await Promise.all(promises);
-                setSongData(res.map((r) => r.data.data));
+                const songData = res?.map((r) => r.data.data);
+                setSongData({ items: songData });
             }
         }
         fetchSongData();
@@ -54,7 +56,7 @@ export default function PlayList({ navigation, route }) {
                     dispatch(setPlaylist(data?.data?.song.items));
                     dispatch(setPlaylistId(id));
                     dispatch(setCurrentProgress(0));
-                } else {
+                } else if (type !== "liked") {
                     const myPlaylistData = userInfo?.MyPlaylistSongs.filter(
                         (item) => item.playlistId === MyPlaylistId
                     );
@@ -69,6 +71,9 @@ export default function PlayList({ navigation, route }) {
                     );
                     // Wait for all requests to finish
                     const songDetails = await Promise.all(songDetailsPromises);
+                    dispatch(setPlaylist(songDetails));
+                    dispatch(setCurrentSongIndex(0));
+                    dispatch(setCurrentProgress(0));
                     setMyPlayListSongs({ items: songDetails });
                 }
             }

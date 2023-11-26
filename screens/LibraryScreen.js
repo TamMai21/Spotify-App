@@ -62,7 +62,7 @@ export default function LibraryScreen({ route, navigation }) {
             <Header title={"Library"} navigation={navigation} />
 
             <Pressable
-                style={{ position: "absolute", top: 30, right: 20 }}
+                style={{ position: "absolute", top: 14, right: 20 }}
                 onPress={handleAddPlaylistPress}
             >
                 <Image

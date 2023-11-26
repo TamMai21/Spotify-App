@@ -41,11 +41,11 @@ const ArtistListScreen = ({ route, navigation }) => {
     const toggleSelection = (artist) => {
         setSelectedArtists((prevSelectedArtists) => {
             console.log(artist);
-            const existingArtist = prevSelectedArtists.find(
+            const existingArtist = prevSelectedArtists?.find(
                 (a) => a.id === artist.id
             );
             if (existingArtist) {
-                return prevSelectedArtists.filter((a) => a.id !== artist.id);
+                return prevSelectedArtists?.filter((a) => a.id !== artist.id);
             } else {
                 return [...prevSelectedArtists, artist];
             }
@@ -62,7 +62,7 @@ const ArtistListScreen = ({ route, navigation }) => {
                     source={{ uri: item.thumbnail }}
                     style={styles.artistImage}
                 />
-                {selectedArtists.some((artist) => artist.id === item.id) && (
+                {selectedArtists?.some((artist) => artist.id === item.id) && (
                     <View style={styles.selectionTick}>
                         <Text style={styles.selectionTickText}>✓</Text>
                     </View>
