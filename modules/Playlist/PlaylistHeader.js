@@ -133,7 +133,6 @@ export default function PlaylistHeader({ data, type, myPlaylist, isLiked }) {
 
     useEffect(() => {
         if (userInfo?.Playlist?.some((pl) => pl.playlistId === playlistId)) {
-            console.log("running");
             dispatch(setIsLove(true));
         } else {
             dispatch(setIsLove(false));

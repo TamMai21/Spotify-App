@@ -15,12 +15,10 @@ import addArtistIntoUserLibrary from "../utils/addArtistIntoUserLibrary";
 
 const ArtistListScreen = ({ route, navigation }) => {
     const { userInfo, setUserInfo } = useAuth();
-    console.log("ArtistListScreen ~ userInfo:", userInfo);
     const [artistData, setArtistData] = useState(null);
     const [selectedArtists, setSelectedArtists] = useState(
-        route.params.selectedArtists
+        route.params.selectedArtists ? route.params.selectedArtists : []
     );
-    console.log("ArtistListScreen ~ selectedArtists:", selectedArtists);
     const [searchText, setSearchText] = useState("");
 
     useEffect(() => {
@@ -40,17 +38,22 @@ const ArtistListScreen = ({ route, navigation }) => {
 
     const toggleSelection = (artist) => {
         setSelectedArtists((prevSelectedArtists) => {
-            console.log(artist);
-            const existingArtist = prevSelectedArtists?.find(
+            const existingArtistIndex = prevSelectedArtists.findIndex(
                 (a) => a.id === artist.id
             );
-            if (existingArtist) {
-                return prevSelectedArtists?.filter((a) => a.id !== artist.id);
+
+            // If the artist is already selected, remove it
+            if (existingArtistIndex !== -1) {
+                const newSelectedArtists = [...prevSelectedArtists];
+                newSelectedArtists.splice(existingArtistIndex, 1);
+                return newSelectedArtists;
             } else {
-                return [...prevSelectedArtists, artist];
+                // If a different artist is selected, replace the previous selection
+                return [artist];
             }
         });
     };
+
 
     const renderItem = ({ item }) => (
         <TouchableOpacity
@@ -78,7 +81,7 @@ const ArtistListScreen = ({ route, navigation }) => {
             navigation.goBack();
             return;
         } else {
-            selectedArtists?.forEach(async (artist) => {
+            selectedArtists?.forEach((artist) => {
                 const artistId = artist.id;
                 const playlistId = artist.playlistId;
                 const name = artist.name;
