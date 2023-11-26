@@ -54,10 +54,14 @@ export default function LibraryScreen({ route, navigation }) {
                             <View style={{ height: 15 }} />
                         )}
                         renderItem={({ item }) => {
-                            const playlistSong = userInfo.MyPlaylistSongs.find(
-                                (playlist) => playlist.playlistId === item.playlistId
-                            );
-                            const uri = playlistSong ? playlistSong.song.thumbnailM : item.thumbnail;
+                            var uri = item.thumbnail;
+                            if (userInfo?.MyPlaylistSongs) {
+                                const playlistSong = userInfo.MyPlaylistSongs.find(
+                                    (playlist) => playlist.playlistId === item.playlistId
+                                );
+                                uri = playlistSong ? playlistSong.song.thumbnailM : item.thumbnail;
+                            }
+                            console.log("uri:", uri);
                             return (
                                 <TouchableOpacity
                                     style={styles.musicItemContainer}

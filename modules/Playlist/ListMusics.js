@@ -10,13 +10,40 @@ import {
     setRadioUrl,
     setShowPlayer,
 } from "../../redux-toolkit/playerSlice";
+import AddSongToPlaylistScreen from "../../screens/AddSongToPlaylistScreen";
 
-export default function ListMusics({ data }) {
-
-    if (!data) return null;
+export default function ListMusics({ navigation, data, type, onAddMusic }) {
+    // if (!data) return null;
     const dispatch = useDispatch();
+    const handleAddMusicToMyPlayList = () => {
+        onAddMusic();
+    };
     return (
         <View style={{ marginBottom: 80 }}>
+            {type == "myPlaylist" &&
+                <Pressable
+                    style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 10,
+                        marginTop: 10,
+                        flex: 1
+                    }}
+                    onPress={() => handleAddMusicToMyPlayList()}
+                >
+                    <View
+                        style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                        <View style={{ backgroundColor: "#333", padding: 10 }}>
+                            <Image source={require('../../assets/plus.png')} style={{ width: 30, height: 30 }} />
+                        </View>
+                        <Text style={{
+                            color: "white",
+                            fontSize: 16,
+                            fontWeight: "bold",
+                        }}>Thêm vào danh sách phát này</Text>
+                    </View>
+                </Pressable>
+            }
             {data?.items?.map((item, index) => {
                 return (
                     <Pressable

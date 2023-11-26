@@ -8,13 +8,18 @@ import { useDispatch } from "react-redux";
 import { setPlaylist, setPlaylistId } from "../../redux-toolkit/playerSlice";
 import { useAuth } from "../../context/auth-context";
 
-export default function PlayList({ route }) {
+export default function PlayList({ navigation, route }) {
     const { id, MyPlaylistId } = route.params;
     const [data, setData] = React.useState({});
     const [myPlaylistData, setMyPlaylistData] = useState([]);
     const dispatch = useDispatch();
     const { userInfo, setUserInfo } = useAuth();
     const [myPlayListSongs, setMyPlayListSongs] = useState(null)
+
+    const handleAddMusicToMyPlayList = () => {
+        navigation.navigate("AddSongToPlaylistScreen", { id: MyPlaylistId });
+    };
+
     useEffect(() => {
         async function fetchPlayListData() {
             if (!MyPlaylistId) {
@@ -25,18 +30,20 @@ export default function PlayList({ route }) {
                 dispatch(setPlaylist(data?.data?.song.items));
                 dispatch(setPlaylistId(id));
             } else {
-                const myPlaylistData = userInfo?.MyPlaylistSongs.filter(
-                    (item) => item.playlistId === MyPlaylistId
-                );
-                setMyPlaylistData(myPlaylistData);
-                const songDetailsPromises = myPlaylistData.map(async (item) => {
-                    const songRes = await axios.get(zingmp3Api.getSong(item.song.encodeId));
-                    return songRes.data.data;
-                });
+                if (userInfo?.MyPlaylistSongs) {
+                    const myPlaylistData = userInfo?.MyPlaylistSongs.filter(
+                        (item) => item.playlistId === MyPlaylistId
+                    );
+                    setMyPlaylistData(myPlaylistData);
+                    const songDetailsPromises = myPlaylistData.map(async (item) => {
+                        const songRes = await axios.get(zingmp3Api.getSong(item.song.encodeId));
+                        return songRes.data.data;
+                    });
 
-                // Wait for all requests to finish
-                const songDetails = await Promise.all(songDetailsPromises);
-                setMyPlayListSongs({ items: songDetails });
+                    // Wait for all requests to finish
+                    const songDetails = await Promise.all(songDetailsPromises);
+                    setMyPlayListSongs({ items: songDetails });
+                }
             }
         }
         fetchPlayListData();
@@ -45,7 +52,7 @@ export default function PlayList({ route }) {
         <View style={styles.container}>
             <PlaylistHeader
                 data={MyPlaylistId ? myPlaylistData[0] : data}
-                myPlaylist={userInfo.MyPlaylist.find(MyPlaylist => MyPlaylist.playlistId == MyPlaylistId)}
+                myPlaylist={userInfo.MyPlaylist ? userInfo.MyPlaylist.find(MyPlaylist => MyPlaylist.playlistId == MyPlaylistId) : undefined}
                 type="playlist" />
             {!MyPlaylistId && (
                 <>
@@ -54,7 +61,12 @@ export default function PlayList({ route }) {
             )}
             {MyPlaylistId && (
                 <>
-                    <ListMusics data={myPlayListSongs} />
+                    <ListMusics
+                        navigation={navigation}
+                        data={myPlayListSongs}
+                        type="myPlaylist"
+                        onAddMusic={handleAddMusicToMyPlayList}
+                    />
                 </>
             )}
         </View>

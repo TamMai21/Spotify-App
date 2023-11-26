@@ -23,7 +23,7 @@ import removePlaylistFromUserLibrary from "../../utils/removePlaylistfromUserLib
 import Toast from "react-native-toast-message";
 
 export default function PlaylistHeader({ data, type, myPlaylist }) {
-    if (!data) return null;
+    // if (!data) return null;
     const { userInfo, setUserInfo } = useAuth();
     console.log("PlaylistHeader ~ userInfo:", userInfo);
     const isPlaying = useSelector((state) => state.player.isPlaying);
@@ -35,7 +35,6 @@ export default function PlaylistHeader({ data, type, myPlaylist }) {
     const playlistId = useSelector((state) => state.player.playlistId);
     console.log("PlaylistHeader ~ playlistId:", playlistId);
     const dispatch = useDispatch();
-
     // create a function to autoplay the playlist
     useEffect(() => {
         if (playlist?.length > 0) {
@@ -142,9 +141,23 @@ export default function PlaylistHeader({ data, type, myPlaylist }) {
                         }}
                     ></Image>
                 )}
-                {myPlaylist && (
+                {myPlaylist && data?.song && (
                     <Image
                         source={{ uri: data.song.thumbnailM }}
+                        style={{
+                            position: "absolute",
+                            top: 10,
+                            left: 100,
+                            width: 200,
+                            height: 200,
+                            borderRadius: 9999,
+                            resizeMode: "cover",
+                        }}
+                    ></Image>
+                )}
+                {myPlaylist && !data?.song && (
+                    <Image
+                        source={{ uri: myPlaylist.thumbnail }}
                         style={{
                             position: "absolute",
                             top: 10,

@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import addPlaylistIntoUserLibrary from "../utils/addPlaylistIntoUserLibrary";
 import { useAuth } from "../context/auth-context";
 import { addMyPlayListIntoUserLibrary } from "../utils/addMyPlayListIntoUserlibrary";
+import { addSongsToMyPlaylist } from "../utils/addSongToMyPlaylist";
 
 export default function CreatePlaylistScreen({ route, navigation }) {
     const [playlistName, setPlaylistName] = useState("");
@@ -19,6 +20,7 @@ export default function CreatePlaylistScreen({ route, navigation }) {
 
     const handleAddPlaylist = () => {
         addMyPlayListIntoUserLibrary(id, playlistName, 'https://icons-for-free.com/iconfiles/png/512/music+note+sound+icon-1320183235697157602.png', userInfo, setUserInfo);
+        addSongsToMyPlaylist()
         navigation.navigate("LibraryScreen");
 
         navigation.pop();
