@@ -4,6 +4,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LibraryScreen from "../screens/LibraryScreen";
 import ArtistListScreen from "../screens/ArtistListScreen";
 import Artist from "../modules/Playlist/Artist";
+import PlayList from "../modules/Playlist/PlayList";
+import CreatePlaylistScreen from "../screens/CreatePlaylistScreen";
+import AddSongToPlaylistScreen from "../screens/AddSongToPlaylistScreen";
 const Stack = createNativeStackNavigator();
 export default function LibraryStack() {
     return (
@@ -36,6 +39,34 @@ export default function LibraryStack() {
                     headerTintColor: "white",
                     headerShadowVisible: false,
                 }}
+            />
+            <Stack.Screen
+                name="PlayList"
+                component={PlayList}
+                options={{
+                    headerTitle: "",
+                    headerBackground: () => {
+                        return (
+                            <View
+                                style={{
+                                    background: "#0080AE",
+                                    flex: 1,
+                                }}
+                            ></View>
+                        );
+                    },
+                    headerTintColor: "white",
+                    headerShadowVisible: false,
+                }}
+            />
+            <Stack.Screen
+                name="CreatePlaylistScreen"
+                component={CreatePlaylistScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="AddSongToPlaylistScreen"
+                component={AddSongToPlaylistScreen}
             />
         </Stack.Navigator>
     );

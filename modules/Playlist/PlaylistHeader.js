@@ -22,7 +22,7 @@ import { useAuth } from "../../context/auth-context";
 import removePlaylistFromUserLibrary from "../../utils/removePlaylistfromUserLibrary";
 import SkeletonContent from "react-native-skeleton-content";
 
-export default function PlaylistHeader({ data, type }) {
+export default function PlaylistHeader({ data, type, myPlaylist }) {
     if (!data || Object.keys(data).length === 0) {
         console.log("Loading...");
         return (
@@ -119,6 +119,7 @@ export default function PlaylistHeader({ data, type }) {
     const playlistId = useSelector((state) => state.player.playlistId);
     console.log("PlaylistHeader ~ playlistId:", playlistId);
     const dispatch = useDispatch();
+
     // create a function to autoplay the playlist
     useEffect(() => {
         if (playlist?.length > 0) {
@@ -168,7 +169,7 @@ export default function PlaylistHeader({ data, type }) {
                         "linear-gradient(180deg, #0080AE 0%, rgba(0, 0, 0, 0.00) 100%)",
                 }}
             >
-                {type === "newrelease" && (
+                {!myPlaylist && type === "newrelease" && (
                     <Image
                         source={{ uri: data?.items?.[0].thumbnailM }}
                         style={{
@@ -182,7 +183,7 @@ export default function PlaylistHeader({ data, type }) {
                         }}
                     ></Image>
                 )}
-                {type === "radio" && (
+                {!myPlaylist && type === "radio" && (
                     <Image
                         source={{
                             uri: data?.items?.[0]?.items?.[0]?.thumbnailM,
@@ -198,7 +199,7 @@ export default function PlaylistHeader({ data, type }) {
                         }}
                     ></Image>
                 )}
-                {type === "hub" && (
+                {!myPlaylist && type === "hub" && (
                     <Image
                         source={{ uri: data?.thumbnailHasText }}
                         style={{
@@ -212,9 +213,23 @@ export default function PlaylistHeader({ data, type }) {
                         }}
                     ></Image>
                 )}
-                {type === "playlist" && (
+                {!myPlaylist && type === "playlist" && (
                     <Image
                         source={{ uri: data?.thumbnailM }}
+                        style={{
+                            position: "absolute",
+                            top: 10,
+                            left: 100,
+                            width: 200,
+                            height: 200,
+                            borderRadius: 9999,
+                            resizeMode: "cover",
+                        }}
+                    ></Image>
+                )}
+                {myPlaylist && (
+                    <Image
+                        source={{ uri: data.song.thumbnailM }}
                         style={{
                             position: "absolute",
                             top: 10,
@@ -235,7 +250,8 @@ export default function PlaylistHeader({ data, type }) {
                     marginTop: 200,
                 }}
             >
-                {type === "radio" ? "Radio Now" : data?.title}
+                {!myPlaylist && type === "radio" ? "Radio Now" : data?.title}
+                {myPlaylist && myPlaylist?.name}
             </Text>
             <View
                 style={{
@@ -254,7 +270,12 @@ export default function PlaylistHeader({ data, type }) {
                     }}
                 >
                     <Pressable onPress={handleAddPlaylist}>
-                        <IconLove fill={isLove ? "red" : "white"}></IconLove>
+                        {myPlaylist && (
+                            <Image source={require('../../assets/download-circular-button.png')} style={{ width: 24, height: 24 }} />
+                        )}
+                        {!myPlaylist && (
+                            <IconLove fill={isLove ? "red" : "white"}></IconLove>
+                        )}
                     </Pressable>
                     <Pressable onPress={handleRemove}>
                         <IconShare></IconShare>

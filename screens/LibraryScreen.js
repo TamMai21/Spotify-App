@@ -6,14 +6,20 @@ import {
     FlatList,
     TouchableOpacity,
     Image,
+    Pressable,
 } from "react-native";
 import ArtistListScreen from "./ArtistListScreen";
 import { useAuth } from "../context/auth-context";
 import removeArtistFromUserLibrary from "../utils/removeArtistFromUserLibrary";
+import { useAuth } from "../context/auth-context";
+import axios from "axios";
+import { zingmp3Api } from "../apis/constants";
+import Header from "../modules/Search/Header";
+
 export default function LibraryScreen({ route, navigation }) {
     const { userInfo, setUserInfo } = useAuth();
     const [selectedArtists, setSelectedArtists] = useState([]);
-
+    var object;
     useEffect(() => {
         if (route.params && route.params.selectedArtists) {
             setSelectedArtists(route.params.selectedArtists);
@@ -31,14 +37,88 @@ export default function LibraryScreen({ route, navigation }) {
         navigation.navigate("ArtistPage", { id: artist.playlistId });
     };
 
+    const handleAddPlaylistPress = () => {
+        navigation.navigate("CreatePlaylistScreen");
+    };
+
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.headerText}>Your Library</Text>
-            </View>
+            <Header title={'Library'} navigation={navigation} />
+
+            <Pressable style={{ position: 'absolute', top: 30, right: 20 }} onPress={handleAddPlaylistPress}>
+                <Image source={require('../assets/plus.png')} style={{ width: 20, height: 20 }} />
+            </Pressable>
 
             <View style={styles.columnContainer}>
                 <View style={styles.sectionContainer}>
+                    <FlatList
+                        data={userInfo.MyPlaylist}
+                        ItemSeparatorComponent={() => (
+                            <View style={{ height: 15 }} />
+                        )}
+                        renderItem={({ item }) => {
+                            const playlistSong = userInfo.MyPlaylistSongs.find(
+                                (playlist) => playlist.playlistId === item.playlistId
+                            );
+                            const uri = playlistSong ? playlistSong.song.thumbnailM : item.thumbnail;
+                            return (
+                                <TouchableOpacity
+                                    style={styles.musicItemContainer}
+                                    onPress={() => {
+                                        navigation.navigate(
+                                            "PlayList",
+                                            {
+                                                MyPlaylistId: item.playlistId,
+                                            }
+                                        );
+                                    }}
+                                >
+                                    <Image
+                                        source={{ uri: uri }}
+                                        style={styles.playlistItemImage}
+                                    />
+                                    <View style={styles.itemTextContainer}>
+                                        <Text style={styles.itemTitle}>
+                                            {item.name}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            )
+                        }}
+                        keyExtractor={(item) => item.playlistId}
+                    />
+
+                    <FlatList
+                        data={userInfo.Playlist}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                style={styles.musicItemContainer}
+                                onPress={() => (
+                                    navigation.navigate(
+                                        "PlayList",
+                                        {
+                                            id: item.playlistId,
+                                        }
+                                    )
+                                )}
+                            >
+                                <Image
+                                    source={{ uri: item?.thumbnail }}
+                                    style={styles.playlistItemImage}
+                                />
+                                <View style={styles.itemTextContainer}>
+                                    <Text style={styles.itemTitle}>
+                                        {item?.name}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                        keyExtractor={(item) => item?.playlistId}
+                        ItemSeparatorComponent={() => (
+                            <View style={{ height: 15 }} />
+                        )}
+                    />
+
                     <FlatList
                         data={selectedArtists}
                         ItemSeparatorComponent={() => (
@@ -75,7 +155,7 @@ export default function LibraryScreen({ route, navigation }) {
                                     +
                                 </Text>
                             </View>
-                            <Text style={styles.addButtonLabel}>Add Music</Text>
+                            <Text style={styles.addButtonLabel}>Add Artist</Text>
                         </TouchableOpacity>
                         {/* Test feature remove artist from Artist */}
                         <TouchableOpacity
@@ -123,11 +203,18 @@ const styles = StyleSheet.create({
     },
     sectionContainer: {
         marginBottom: 16,
+        gap: 15
     },
     musicItemContainer: {
         marginRight: 16,
         alignItems: "center",
         flexDirection: "row",
+    },
+    playlistItemImage: {
+        width: 66,
+        height: 64,
+        borderRadius: 10,
+        backgroundColor: '#fff'
     },
     musicItemImage: {
         width: 66,
